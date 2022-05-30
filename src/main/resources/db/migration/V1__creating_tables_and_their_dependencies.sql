@@ -1,4 +1,4 @@
-CREATE TABLE companies  (
+CREATE TABLE company  (
     id IDENTITY PRIMARY KEY,
     name VARCHAR(200),
     description VARCHAR(200)
@@ -21,7 +21,7 @@ CREATE TABLE projects (
 ALTER TABLE projects
 ADD CONSTRAINT company_id_fk
 FOREIGN KEY(company_id)
-REFERENCES companies(id);
+REFERENCES company(id);
 
 ALTER TABLE projects
 ADD CONSTRAINT customer_id_fk
