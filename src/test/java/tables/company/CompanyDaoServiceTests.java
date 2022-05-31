@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import prefs.Prefs;
 import storage.DatabaseInitService;
 
 import java.sql.Connection;
@@ -20,7 +21,7 @@ class CompanyDaoServiceTests {
 
     @BeforeEach
     public void beforeEach() throws SQLException {
-        String connectionUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
+        String connectionUrl = new Prefs().getString("testDbUrl");
         new DatabaseInitService().initDb(connectionUrl);
         connection = DriverManager.getConnection(connectionUrl);
         daoService = new CompanyDaoService(connection);
@@ -42,11 +43,13 @@ class CompanyDaoServiceTests {
         originalCompany.add(fullValueCompany);
 
         Company nullNameCompany = new Company();
+        nullNameCompany.setName(null);
         nullNameCompany.setDescription("TestDescriptionCompany");
         originalCompany.add(nullNameCompany);
 
         Company nullDescriptionCompany = new Company();
         nullDescriptionCompany.setName("TestNameCompany");
+        nullDescriptionCompany.setDescription(null);
         originalCompany.add(nullDescriptionCompany);
 
         for (Company original : originalCompany) {

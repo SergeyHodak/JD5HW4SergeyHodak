@@ -4,7 +4,6 @@ import exceptions.AgeOutOfRange;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tables.developers.Developers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,8 @@ class DevelopersTests {
         Developers developers = new Developers();
         String result = "Developers{" +
                 "id=" + 0 +
-                ", name_surname='" + null + '\'' +
+                ", first_name='" + null + '\'' +
+                ", second_name='" + null + '\'' +
                 ", age=" + 0 +
                 ", gender=" + null +
                 '}';
@@ -23,16 +23,33 @@ class DevelopersTests {
     }
 
     @Test
-    public void testSetName_surname() {
+    public void testSetFirst_name() {
         List<String> sets = new ArrayList<>();
-        sets.add("Test".repeat(20));
+        sets.add("Test".repeat(5));
         sets.add("Test".repeat(30));
 
         for (String set : sets) {
             try {
                 Developers developers = new Developers();
-                developers.setName_surname(set);
-                Assertions.assertEquals(set, developers.getName_surname());
+                developers.setFirstName(set);
+                Assertions.assertEquals(set, developers.getFirstName());
+            } catch (NumberOfCharactersExceedsTheLimit thrown) {
+                Assertions.assertNotEquals("", thrown.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void testSetSecond_name() {
+        List<String> sets = new ArrayList<>();
+        sets.add("Test".repeat(7));
+        sets.add("Test".repeat(31));
+
+        for (String set : sets) {
+            try {
+                Developers developers = new Developers();
+                developers.setSecondName(set);
+                Assertions.assertEquals(set, developers.getSecondName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }

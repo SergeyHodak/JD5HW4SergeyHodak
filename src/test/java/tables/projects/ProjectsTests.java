@@ -4,7 +4,6 @@ import exceptions.MustNotBeNull;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tables.projects.Projects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,8 @@ class ProjectsTests {
         String result = "Projects{" +
                 "id=" + 0 +
                 ", name='" + null + '\'' +
-                ", company_id=" + 0 +
-                ", customer_id=" + 0 +
+                ", companyId=" + 0 +
+                ", customerId=" + 0 +
                 '}';
         Assertions.assertEquals(result, projects.toString());
     }
@@ -40,13 +39,13 @@ class ProjectsTests {
     }
 
     @Test
-    public void testSetCompany_id() {
+    public void testSetCompanyId() {
         int[] sets = {18, 50, 180, 0};
         for (int set : sets) {
             try {
                 Projects projects = new Projects();
-                projects.setCompany_id(set);
-                Assertions.assertEquals(set, projects.getCompany_id());
+                projects.setCompanyId(set);
+                Assertions.assertEquals(set, projects.getCompanyId());
             } catch (MustNotBeNull thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -54,13 +53,13 @@ class ProjectsTests {
     }
 
     @Test
-    public void testSetCustomer_id() {
+    public void testSetCustomerId() {
         int[] sets = {18, 50, 180, 0};
         for (int set : sets) {
             try {
                 Projects projects = new Projects();
-                projects.setCustomer_id(set);
-                Assertions.assertEquals(set, projects.getCustomer_id());
+                projects.setCustomerId(set);
+                Assertions.assertEquals(set, projects.getCustomerId());
             } catch (MustNotBeNull thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }

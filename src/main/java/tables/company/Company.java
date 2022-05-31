@@ -69,4 +69,12 @@ public class Company {
         if (!getName().equals(company.getName())) return false;
         return getDescription().equals(company.getDescription());
     }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        return result;
+    }
 }

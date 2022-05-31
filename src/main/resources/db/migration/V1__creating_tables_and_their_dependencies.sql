@@ -6,9 +6,10 @@ CREATE TABLE company  (
 
 CREATE TABLE customers (
     id IDENTITY PRIMARY KEY,
-    name_surname VARCHAR(100),
+    first_name VARCHAR(50),
+    second_name VARCHAR(50),
     age INT,
-    CHECK(0 < age and age < 150)
+    CHECK(0 <= age and age <= 150)
 );
 
 CREATE TABLE projects (
@@ -30,7 +31,8 @@ REFERENCES customers(id);
 
 CREATE TABLE developers (
     id IDENTITY PRIMARY KEY,
-    name_surname VARCHAR(100),
+    first_name VARCHAR(50),
+    second_name VARCHAR(50),
     age INT,
     gender VARCHAR(10) NOT NULL,
     CHECK(0 < age and age < 150),

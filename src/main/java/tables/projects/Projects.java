@@ -6,8 +6,8 @@ import exceptions.NumberOfCharactersExceedsTheLimit;
 public class Projects {
     private long id;
     private String name;
-    private long company_id;
-    private long customer_id;
+    private long companyId;
+    private long customerId;
 
     public long getId() {
         return id;
@@ -22,6 +22,10 @@ public class Projects {
     }
 
     public void setName(String name) throws NumberOfCharactersExceedsTheLimit {
+        if (name == null) {
+            this.name = null;
+            return;
+        }
         int limit = 200;
         if(limit >= name.length()) {
             this.name = name;
@@ -30,25 +34,25 @@ public class Projects {
         }
     }
 
-    public long getCompany_id() {
-        return company_id;
+    public long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(long company_id) throws MustNotBeNull {
-        if (company_id > 0) {
-            this.company_id = company_id;
+    public void setCompanyId(long companyId) throws MustNotBeNull {
+        if (companyId > 0) {
+            this.companyId = companyId;
         } else {
             throw new MustNotBeNull();
         }
     }
 
-    public long getCustomer_id() {
-        return customer_id;
+    public long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(long customer_id) throws MustNotBeNull {
-        if (company_id > 0) {
-            this.customer_id = customer_id;
+    public void setCustomerId(long customerId) throws MustNotBeNull {
+        if (companyId > 0) {
+            this.customerId = customerId;
         } else {
             throw new MustNotBeNull();
         }
@@ -59,8 +63,30 @@ public class Projects {
         return "Projects{" +
                 "id=" + getId() +
                 ", name='" + getName() + '\'' +
-                ", company_id=" + getCompany_id() +
-                ", customer_id=" + getCustomer_id() +
+                ", companyId=" + getCompanyId() +
+                ", customerId=" + getCustomerId() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Projects)) return false;
+
+        Projects projects = (Projects) o;
+
+        if (getId() != projects.getId()) return false;
+        if (getCompanyId() != projects.getCompanyId()) return false;
+        if (getCustomerId() != projects.getCustomerId()) return false;
+        return getName().equals(projects.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + (int) (getCompanyId() ^ (getCompanyId() >>> 32));
+        result = 31 * result + (int) (getCustomerId() ^ (getCustomerId() >>> 32));
+        return result;
     }
 }

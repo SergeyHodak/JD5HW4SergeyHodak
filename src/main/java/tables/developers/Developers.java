@@ -5,7 +5,8 @@ import exceptions.NumberOfCharactersExceedsTheLimit;
 
 public class Developers {
     private long id;
-    private String name_surname;
+    private String firstName;
+    private String secondName;
     private int age;
     private Gender gender;
 
@@ -22,16 +23,29 @@ public class Developers {
         this.id = id;
     }
 
-    public String getName_surname() {
-        return name_surname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName_surname(String name_surname) throws NumberOfCharactersExceedsTheLimit {
-        int limit = 100;
-        if(limit >= name_surname.length()) {
-            this.name_surname = name_surname;
+    public void setFirstName(String firstName) throws NumberOfCharactersExceedsTheLimit {
+        int limit = 50;
+        if(limit >= firstName.length()) {
+            this.firstName = firstName;
         } else {
-            throw new NumberOfCharactersExceedsTheLimit("name_surname", limit, name_surname);
+            throw new NumberOfCharactersExceedsTheLimit("name_surname", limit, firstName);
+        }
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) throws NumberOfCharactersExceedsTheLimit {
+        int limit = 50;
+        if(limit >= secondName.length()) {
+            this.secondName = secondName;
+        } else {
+            throw new NumberOfCharactersExceedsTheLimit("name_surname", limit, secondName);
         }
     }
 
@@ -61,9 +75,10 @@ public class Developers {
     public String toString() {
         return "Developers{" +
                 "id=" + getId() +
-                ", name_surname='" + getName_surname() + '\'' +
+                ", firstName='" + getFirstName() + '\'' +
+                ", secondName='" + getSecondName() + '\'' +
                 ", age=" + getAge() +
-                ", gender=" + getGender() +
+                ", gender=" + (getGender() == null ? null : getGender().name()) +
                 '}';
     }
 }
