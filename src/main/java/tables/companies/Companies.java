@@ -1,8 +1,8 @@
-package tables.company;
+package tables.companies;
 
 import exceptions.NumberOfCharactersExceedsTheLimit;
 
-public class Company {
+public class Companies {
     private long id;
     private String name;
     private String description;
@@ -61,13 +61,13 @@ public class Company {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Company)) return false;
+        if (!(o instanceof Companies)) return false;
 
-        Company company = (Company) o;
+        Companies companies = (Companies) o;
 
-        if (getId() != company.getId()) return false;
-        if (!getName().equals(company.getName())) return false;
-        return getDescription().equals(company.getDescription());
+        if (getId() != companies.getId()) return false;
+        if (!getName().equals(companies.getName())) return false;
+        return getDescription().equals(companies.getDescription());
     }
 
     @Override

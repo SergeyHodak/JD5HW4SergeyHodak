@@ -1,4 +1,4 @@
-package tables.company;
+package tables.companies;
 
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class CompanyTests {
+class CompaniesTests {
 
     @Test
     public void testToStringAndGetters() {
-        Company companies = new Company();
+        Companies companies = new Companies();
         String result = "Companies{" +
                 "id=" + 0 +
                 ", name='" + null + '\'' +
@@ -28,7 +28,7 @@ class CompanyTests {
 
         for (String set : sets) {
             try {
-                Company companies = new Company();
+                Companies companies = new Companies();
                 companies.setName(set);
                 Assertions.assertEquals(set, companies.getName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
@@ -45,7 +45,7 @@ class CompanyTests {
 
         for (String set : sets) {
             try {
-                Company companies = new Company();
+                Companies companies = new Companies();
                 companies.setDescription(set);
                 Assertions.assertEquals(set, companies.getDescription());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {

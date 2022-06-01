@@ -1,4 +1,4 @@
-package tables.company;
+package tables.companies;
 
 import exceptions.NumberOfCharactersExceedsTheLimit;
 
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyDaoService {
+public class CompaniesDaoService {
     private final PreparedStatement createSt;
     private final PreparedStatement selectMaxIdSt;
     private final PreparedStatement getByIdSt;
@@ -18,39 +18,39 @@ public class CompanyDaoService {
     private final PreparedStatement updateSt;
     private final PreparedStatement deleteByIdSt;
 
-    public CompanyDaoService(Connection connection) throws SQLException {
+    public CompaniesDaoService(Connection connection) throws SQLException {
         createSt = connection.prepareStatement(
-                "INSERT INTO company (name, description) VALUES(?, ?)"
+                "INSERT INTO companies (name, description) VALUES(?, ?)"
         );
 
         selectMaxIdSt = connection.prepareStatement(
-                "SELECT max(id) AS maxId FROM company"
+                "SELECT max(id) AS maxId FROM companies"
         );
 
         getByIdSt = connection.prepareStatement(
-                "SELECT name, description FROM company WHERE id = ?"
+                "SELECT name, description FROM companies WHERE id = ?"
         );
 
         clearSt = connection.prepareStatement(
-                "DELETE FROM company"
+                "DELETE FROM companies"
         );
 
         getAllSt = connection.prepareStatement(
-                "SELECT id, name, description FROM company"
+                "SELECT id, name, description FROM companies"
         );
 
         updateSt = connection.prepareStatement(
-                "UPDATE company SET name = ?, description = ? WHERE id = ?"
+                "UPDATE companies SET name = ?, description = ? WHERE id = ?"
         );
 
         deleteByIdSt = connection.prepareStatement(
-                "DELETE FROM company WHERE id = ?"
+                "DELETE FROM companies WHERE id = ?"
         );
     }
 
-    public long create(Company company) throws SQLException {
-        createSt.setString(1, company.getName());
-        createSt.setString(2, company.getDescription());
+    public long create(Companies companies) throws SQLException {
+        createSt.setString(1, companies.getName());
+        createSt.setString(2, companies.getDescription());
         createSt.executeUpdate();
         long id;
         try (ResultSet rs = selectMaxIdSt.executeQuery()) {
@@ -60,13 +60,13 @@ public class CompanyDaoService {
         return id;
     }
 
-    public Company getById(long id) throws SQLException {
+    public Companies getById(long id) throws SQLException {
         getByIdSt.setLong(1, id);
         try (ResultSet rs = getByIdSt.executeQuery()) {
             if (!rs.next()) {
                 return null;
             }
-            Company result = new Company();
+            Companies result = new Companies();
             result.setId(id);
             result.setName(rs.getString("name"));
             result.setDescription(rs.getString("description"));
@@ -80,15 +80,15 @@ public class CompanyDaoService {
         clearSt.executeUpdate();
     }
 
-    public List<Company> getAll() throws SQLException {
+    public List<Companies> getAll() throws SQLException {
         try(ResultSet rs = getAllSt.executeQuery()) {
-            List<Company> result = new ArrayList<>();
+            List<Companies> result = new ArrayList<>();
             while (rs.next()) {
-                Company company = new Company();
-                company.setId(rs.getLong("id"));
-                company.setName(rs.getString("name"));
-                company.setDescription(rs.getString("description"));
-                result.add(company);
+                Companies companies = new Companies();
+                companies.setId(rs.getLong("id"));
+                companies.setName(rs.getString("name"));
+                companies.setDescription(rs.getString("description"));
+                result.add(companies);
             }
             return result;
         } catch (NumberOfCharactersExceedsTheLimit e) {
@@ -96,10 +96,10 @@ public class CompanyDaoService {
         }
     }
 
-    public void update(Company company) throws SQLException {
-        updateSt.setString(1, company.getName());
-        updateSt.setString(2, company.getDescription());
-        updateSt.setLong(3, company.getId());
+    public void update(Companies companies) throws SQLException {
+        updateSt.setString(1, companies.getName());
+        updateSt.setString(2, companies.getDescription());
+        updateSt.setLong(3, companies.getId());
         updateSt.executeUpdate();
     }
 

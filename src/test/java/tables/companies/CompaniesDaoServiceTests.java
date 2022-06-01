@@ -1,4 +1,4 @@
-package tables.company;
+package tables.companies;
 
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class CompanyDaoServiceTests {
+class CompaniesDaoServiceTests {
     private Connection connection;
-    private CompanyDaoService daoService;
+    private CompaniesDaoService daoService;
 
     @BeforeEach
     public void beforeEach() throws SQLException {
         String connectionUrl = new Prefs().getString("testDbUrl");
         new DatabaseInitService().initDb(connectionUrl);
         connection = DriverManager.getConnection(connectionUrl);
-        daoService = new CompanyDaoService(connection);
+        daoService = new CompaniesDaoService(connection);
         daoService.clear();
     }
 
@@ -35,26 +35,26 @@ class CompanyDaoServiceTests {
 
     @Test
     public void testCreateNewCompany() throws NumberOfCharactersExceedsTheLimit, SQLException {
-        List<Company> originalCompany = new ArrayList<>();
+        List<Companies> originalCompanies = new ArrayList<>();
 
-        Company fullValueCompany = new Company();
-        fullValueCompany.setName("TestNameCompany");
-        fullValueCompany.setDescription("TestDescriptionCompany");
-        originalCompany.add(fullValueCompany);
+        Companies fullValueCompanies = new Companies();
+        fullValueCompanies.setName("TestNameCompany");
+        fullValueCompanies.setDescription("TestDescriptionCompany");
+        originalCompanies.add(fullValueCompanies);
 
-        Company nullNameCompany = new Company();
-        nullNameCompany.setName(null);
-        nullNameCompany.setDescription("TestDescriptionCompany");
-        originalCompany.add(nullNameCompany);
+        Companies nullNameCompanies = new Companies();
+        nullNameCompanies.setName(null);
+        nullNameCompanies.setDescription("TestDescriptionCompany");
+        originalCompanies.add(nullNameCompanies);
 
-        Company nullDescriptionCompany = new Company();
-        nullDescriptionCompany.setName("TestNameCompany");
-        nullDescriptionCompany.setDescription(null);
-        originalCompany.add(nullDescriptionCompany);
+        Companies nullDescriptionCompanies = new Companies();
+        nullDescriptionCompanies.setName("TestNameCompany");
+        nullDescriptionCompanies.setDescription(null);
+        originalCompanies.add(nullDescriptionCompanies);
 
-        for (Company original : originalCompany) {
+        for (Companies original : originalCompanies) {
             long id = daoService.create(original);
-            Company saved = daoService.getById(id);
+            Companies saved = daoService.getById(id);
 
             Assertions.assertEquals(id, saved.getId());
             Assertions.assertEquals(original.getName(), saved.getName());
@@ -64,49 +64,49 @@ class CompanyDaoServiceTests {
 
     @Test
     public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit {
-        Company expected = new Company();
+        Companies expected = new Companies();
         expected.setName("TestNameCompany");
         expected.setDescription("TestDescriptionCompany");
 
         long id = daoService.create(expected);
         expected.setId(id);
 
-        List<Company> expectedHumans = Collections.singletonList(expected);
-        List<Company> actualHumans = daoService.getAll();
+        List<Companies> expectedHumans = Collections.singletonList(expected);
+        List<Companies> actualHumans = daoService.getAll();
 
         Assertions.assertEquals(expectedHumans, actualHumans);
     }
 
     @Test
     public void testUpdate() throws SQLException, NumberOfCharactersExceedsTheLimit {
-        Company original = new Company();
+        Companies original = new Companies();
         original.setName("TestNameCompany");
         original.setDescription("TestDescriptionCompany");
 
         long id = daoService.create(original);
         original.setId(id);
 
-        List<Company> originalCompanies = new ArrayList<>();
-        Company fullUpdate = new Company();
+        List<Companies> originalCompanies = new ArrayList<>();
+        Companies fullUpdate = new Companies();
         fullUpdate.setName("New Name");
-        fullUpdate.setDescription("New Description For Company");
+        fullUpdate.setDescription("New Description For Companies");
         daoService.update(fullUpdate);
         originalCompanies.add(daoService.getById(id));
 
-        Company nullNameUpdate = new Company();
+        Companies nullNameUpdate = new Companies();
         nullNameUpdate.setName(null);
         nullNameUpdate.setDescription("New Description For Company1");
         daoService.update(nullNameUpdate);
         originalCompanies.add(daoService.getById(id));
 
-        Company nullDescriptionUpdate = new Company();
+        Companies nullDescriptionUpdate = new Companies();
         nullDescriptionUpdate.setName("New Name1");
         nullDescriptionUpdate.setDescription(null);
         daoService.update(nullDescriptionUpdate);
         originalCompanies.add(daoService.getById(id));
 
-        for (Company updated : originalCompanies) {
-            Company saved = daoService.getById(id);
+        for (Companies updated : originalCompanies) {
+            Companies saved = daoService.getById(id);
 
             Assertions.assertEquals(id, updated.getId());
             Assertions.assertEquals(saved.getName(), updated.getName());
@@ -116,7 +116,7 @@ class CompanyDaoServiceTests {
 
     @Test
     public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit {
-        Company expected = new Company();
+        Companies expected = new Companies();
         expected.setName("TestName");
         expected.setDescription("TestDescriptionCompany");
 

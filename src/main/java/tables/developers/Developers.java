@@ -28,6 +28,10 @@ public class Developers {
     }
 
     public void setFirstName(String firstName) throws NumberOfCharactersExceedsTheLimit {
+        if (firstName == null) {
+            this.firstName = null;
+            return;
+        }
         int limit = 50;
         if(limit >= firstName.length()) {
             this.firstName = firstName;
@@ -41,6 +45,10 @@ public class Developers {
     }
 
     public void setSecondName(String secondName) throws NumberOfCharactersExceedsTheLimit {
+        if (secondName == null) {
+            this.secondName = null;
+            return;
+        }
         int limit = 50;
         if(limit >= secondName.length()) {
             this.secondName = secondName;
@@ -56,7 +64,7 @@ public class Developers {
     public void setAge(int age) throws AgeOutOfRange {
         int min = 0;
         int max = 150;
-        if (min < age & age < max) {
+        if (min <= age & age <= max) {
             this.age = age;
         } else {
             throw new AgeOutOfRange("age", min, max, age);
@@ -80,5 +88,29 @@ public class Developers {
                 ", age=" + getAge() +
                 ", gender=" + (getGender() == null ? null : getGender().name()) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Developers)) return false;
+
+        Developers that = (Developers) o;
+
+        if (getId() != that.getId()) return false;
+        if (getAge() != that.getAge()) return false;
+        if (!getFirstName().equals(that.getFirstName())) return false;
+        if (!getSecondName().equals(that.getSecondName())) return false;
+        return getGender() == that.getGender();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getFirstName().hashCode();
+        result = 31 * result + getSecondName().hashCode();
+        result = 31 * result + getAge();
+        result = 31 * result + getGender().hashCode();
+        return result;
     }
 }

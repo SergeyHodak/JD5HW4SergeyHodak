@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import prefs.Prefs;
 import storage.DatabaseInitService;
-import tables.company.Company;
-import tables.company.CompanyDaoService;
+import tables.companies.Companies;
+import tables.companies.CompaniesDaoService;
 import tables.customers.Customers;
 import tables.customers.CustomersDaoService;
 
@@ -24,7 +24,7 @@ import java.util.List;
 class ProjectsDaoServiceTests {
     private Connection connection;
     private ProjectsDaoService daoService;
-    private CompanyDaoService companyDaoService;
+    private CompaniesDaoService companiesDaoService;
     private CustomersDaoService customersDaoService;
 
     @BeforeEach
@@ -34,7 +34,7 @@ class ProjectsDaoServiceTests {
         connection = DriverManager.getConnection(connectionUrl);
 
         daoService = new ProjectsDaoService(connection);
-        companyDaoService = new CompanyDaoService(connection);
+        companiesDaoService = new CompaniesDaoService(connection);
         customersDaoService = new CustomersDaoService(connection);
 
         daoService.clear();
@@ -47,10 +47,10 @@ class ProjectsDaoServiceTests {
 
     @Test
     public void testCreate() throws NumberOfCharactersExceedsTheLimit, SQLException, MustNotBeNull, AgeOutOfRange {
-        Company company = new Company();
-        company.setName("TestNameCompany");
-        company.setDescription("TestDescriptionCompany");
-        companyDaoService.create(company);
+        Companies companies = new Companies();
+        companies.setName("TestNameCompany");
+        companies.setDescription("TestDescriptionCompany");
+        companiesDaoService.create(companies);
 
         Customers customers = new Customers();
         customers.setFirstName("TestFirstName");
@@ -85,10 +85,10 @@ class ProjectsDaoServiceTests {
 
     @Test
     public void getAllTest() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
-        Company company = new Company();
-        company.setName("TestNameCompany");
-        company.setDescription("TestDescriptionCompany");
-        companyDaoService.create(company);
+        Companies companies = new Companies();
+        companies.setName("TestNameCompany");
+        companies.setDescription("TestDescriptionCompany");
+        companiesDaoService.create(companies);
 
         Customers customers = new Customers();
         customers.setFirstName("TestFirstName");
@@ -112,15 +112,15 @@ class ProjectsDaoServiceTests {
 
     @Test
     public void testUpdate() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
-        Company company = new Company();
-        company.setName("TestNameCompany");
-        company.setDescription("TestDescriptionCompany");
-        companyDaoService.create(company);
+        Companies companies = new Companies();
+        companies.setName("TestNameCompany");
+        companies.setDescription("TestDescriptionCompany");
+        companiesDaoService.create(companies);
 
-        Company company2 = new Company();
-        company2.setName("TestNameCompany2");
-        company2.setDescription("TestDescriptionCompany2");
-        companyDaoService.create(company2);
+        Companies companies2 = new Companies();
+        companies2.setName("TestNameCompany2");
+        companies2.setDescription("TestDescriptionCompany2");
+        companiesDaoService.create(companies2);
 
         Customers customers = new Customers();
         customers.setFirstName("TestFirstName");
@@ -194,10 +194,10 @@ class ProjectsDaoServiceTests {
 
     @Test
     public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
-        Company company = new Company();
-        company.setName("TestNameCompany");
-        company.setDescription("TestDescriptionCompany");
-        companyDaoService.create(company);
+        Companies companies = new Companies();
+        companies.setName("TestNameCompany");
+        companies.setDescription("TestDescriptionCompany");
+        companiesDaoService.create(companies);
 
         Customers customers = new Customers();
         customers.setFirstName("TestFirstName");

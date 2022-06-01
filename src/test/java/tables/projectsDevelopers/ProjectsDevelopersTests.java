@@ -3,15 +3,14 @@ package tables.projectsDevelopers;
 import exceptions.MustNotBeNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tables.projectsDevelopers.ProjectsDevelopers;
 
 class ProjectsDevelopersTests {
     @Test
     public void testToStringAndGetters() {
         ProjectsDevelopers projectsDevelopers = new ProjectsDevelopers();
         String result = "ProjectsDevelopers{" +
-                "project_id=" + 0 +
-                ", developer_id=" + 0 +
+                "projectId=" + 0 +
+                ", developerId=" + 0 +
                 '}';
         Assertions.assertEquals(result, projectsDevelopers.toString());
     }
@@ -22,8 +21,8 @@ class ProjectsDevelopersTests {
         for (int set : sets) {
             try {
                 ProjectsDevelopers projectsDevelopers = new ProjectsDevelopers();
-                projectsDevelopers.setProject_id(set);
-                Assertions.assertEquals(set, projectsDevelopers.getProject_id());
+                projectsDevelopers.setProjectId(set);
+                Assertions.assertEquals(set, projectsDevelopers.getProjectId());
             } catch (MustNotBeNull thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -36,8 +35,8 @@ class ProjectsDevelopersTests {
         for (int set : sets) {
             try {
                 ProjectsDevelopers projectsDevelopers = new ProjectsDevelopers();
-                projectsDevelopers.setDeveloper_id(set);
-                Assertions.assertEquals(set, projectsDevelopers.getDeveloper_id());
+                projectsDevelopers.setDeveloperId(set);
+                Assertions.assertEquals(set, projectsDevelopers.getDeveloperId());
             } catch (MustNotBeNull thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }

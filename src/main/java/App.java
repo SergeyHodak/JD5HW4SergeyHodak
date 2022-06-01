@@ -1,45 +1,49 @@
 import exceptions.AgeOutOfRange;
+import exceptions.MustNotBeNull;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import prefs.Prefs;
 import storage.DatabaseInitService;
 import storage.Storage;
-import tables.company.Company;
-import tables.company.CompanyDaoService;
+import tables.companies.Companies;
+import tables.companies.CompaniesDaoService;
 import tables.customers.Customers;
 import tables.customers.CustomersDaoService;
+import tables.developers.Developers;
+import tables.developers.DevelopersDaoService;
+import tables.projects.Projects;
+import tables.projects.ProjectsDaoService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange {
+    public static void main(String[] args) throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
         new DatabaseInitService().initDb(new Prefs().getString("dbUrl"));
         Storage storage = Storage.getInstance();
 
 
-        CompanyDaoService companyDaoService = new CompanyDaoService(storage.getConnection());
-        List<Company> companies = new ArrayList<>();
+        CompaniesDaoService companiesDaoService = new CompaniesDaoService(storage.getConnection());
+        List<Companies> companies = new ArrayList<>();
 
-        Company company1 = new Company();
-        company1.setName("Future Technology");
-        company1.setDescription("Approaching humanity to the near future");
-        companies.add(company1);
+        Companies companies1 = new Companies();
+        companies1.setName("Future Technology");
+        companies1.setDescription("Approaching humanity to the near future");
+        companies.add(companies1);
 
-        Company company2 = new Company();
-        company2.setName("Agro firm");
-        company2.setDescription("Intellectual provision of agricultural machinery");
-        companies.add(company2);
+        Companies companies2 = new Companies();
+        companies2.setName("Agro firm");
+        companies2.setDescription("Intellectual provision of agricultural machinery");
+        companies.add(companies2);
 
-        Company company3 = new Company();
-        company3.setName("Integrate and use");
-        company3.setDescription("Moving your business to the digital world");
-        companies.add(company3);
+        Companies companies3 = new Companies();
+        companies3.setName("Integrate and use");
+        companies3.setDescription("Moving your business to the digital world");
+        companies.add(companies3);
 
-        for (Company company : companies) {
-            companyDaoService.create(company);
+        for (Companies company : companies) {
+            companiesDaoService.create(company);
         }
-
 
         CustomersDaoService customersDaoService = new CustomersDaoService(storage.getConnection());
         List<Customers> customers = new ArrayList<>();
@@ -65,33 +69,80 @@ public class App {
         for (Customers customer : customers) {
             customersDaoService.create(customer);
         }
+
+        ProjectsDaoService projectsDaoService = new ProjectsDaoService(storage.getConnection());
+        List<Projects>  projects = new ArrayList<>();
+
+        Projects project1 = new Projects();
+        project1.setName("Artificial intelligence for milling machine");
+        project1.setCompanyId(1);
+        project1.setCustomerId(2);
+        projects.add(project1);
+
+        Projects project2 = new Projects();
+        project2.setName("App for simple options");
+        project2.setCompanyId(3);
+        project2.setCustomerId(1);
+        projects.add(project2);
+
+        Projects project3 = new Projects();
+        project3.setName("Finding profitable ways to exchange currencies");
+        project3.setCompanyId(1);
+        project3.setCustomerId(1);
+        projects.add(project3);
+
+        for (Projects project : projects) {
+            projectsDaoService.create(project);
+        }
+
+
+        DevelopersDaoService developersDaoService = new DevelopersDaoService(storage.getConnection());
+        List<Developers>  developers = new ArrayList<>();
+
+        Developers developer1 = new Developers();
+        developer1.setFirstName("Did");
+        developer1.setFirstName("Panas");
+        developer1.setAge(61);
+        developer1.setGender(Developers.Gender.male);
+        developers.add(developer1);
+
+        Developers developer2 = new Developers();
+        developer2.setFirstName("Fedir");
+        developer2.setFirstName("Tomson");
+        developer2.setAge(45);
+        developer2.setGender(Developers.Gender.male);
+        developers.add(developer2);
+
+        Developers developer3 = new Developers();
+        developer3.setFirstName("Olga");
+        developer3.setFirstName("Dzi");
+        developer3.setAge(50);
+        developer3.setGender(Developers.Gender.female);
+        developers.add(developer3);
+
+        Developers developer4 = new Developers();
+        developer4.setFirstName("Oleg");
+        developer4.setFirstName("Filli");
+        developer4.setAge(23);
+        developer4.setGender(Developers.Gender.male);
+        developers.add(developer4);
+
+        Developers developer5 = new Developers();
+        developer5.setFirstName("Nina");
+        developer5.setFirstName("Weendi");
+        developer5.setAge(24);
+        developer5.setGender(Developers.Gender.female);
+        developers.add(developer5);
+
+        for (Developers developer : developers) {
+            developersDaoService.create(developer);
+        }
+
+        System.out.println(companiesDaoService.getAll());
+        System.out.println(customersDaoService.getAll());
+        System.out.println(projectsDaoService.getAll());
+        System.out.println(developersDaoService.getAll());
     }
-//      INSERT INTO projects (name, company_id, customer_id) VALUES
-//      ('Artificial intelligence for milling machine',
-//        SELECT id
-//        FROM companies
-//        WHERE name='Future Technology',
-//        SELECT id
-//        FROM customers
-//        WHERE name_surname='Kevin Stoon'
-//      ),
-//      ('App for simple options',
-//        SELECT id
-//        FROM companies
-//        WHERE name='Integrate and use',
-//        SELECT id
-//        FROM customers
-//        WHERE name_surname='Aller Han'
-//      ),
-//      ('Finding profitable ways to exchange currencies', 1, 1);
-//
-//      INSERT INTO developers (name_surname, age, gender) VALUES
-//      ('Did Panas', 61, 'male'),
-//      ('Fedir Tomson', 45, 'male'),
-//      ('Olga Dzi', 50, 'female'),
-//      ('Oleg Filli', 23, 'male'),
-//      ('Nina Weendi', 24, 'female');
-//
 //      INSERT INTO projects_developers (project_id, developer_id) VALUES
 //      (1, 1),
 //      (1, 3),
@@ -101,7 +152,7 @@ public class App {
 //      (2, 5),
 //      (3, 1),
 //      (3, 2);
-//
+
 //    INSERT INTO skills (department, skill_level) VALUES
 //    ('java',  'junior'),
 //    ('java',  'middle'),
@@ -109,7 +160,7 @@ public class App {
 //    ('python',  'junior'),
 //    ('python',  'middle'),
 //    ('python',  'senior');
-//
+
 //    INSERT INTO developers_skills (developer_id, skill_id) VALUES
 //    (1, 3),
 //    (1, 6),

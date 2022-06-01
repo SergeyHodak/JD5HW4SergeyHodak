@@ -3,28 +3,37 @@ package tables.projectsDevelopers;
 import exceptions.MustNotBeNull;
 
 public class ProjectsDevelopers {
-    private long project_id;
-    private long developer_id;
+    private long id;
+    private long projectId;
+    private long developerId;
 
-    public long getProject_id() {
-        return project_id;
+    public long getId() {
+        return id;
     }
 
-    public void setProject_id(long project_id) throws MustNotBeNull {
-        if (project_id > 0) {
-            this.project_id = project_id;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) throws MustNotBeNull {
+        if (projectId > 0) {
+            this.projectId = projectId;
         } else {
             throw new MustNotBeNull();
         }
     }
 
-    public long getDeveloper_id() {
-        return developer_id;
+    public long getDeveloperId() {
+        return developerId;
     }
 
-    public void setDeveloper_id(long developer_id) throws MustNotBeNull {
-        if (developer_id > 0) {
-            this.developer_id = developer_id;
+    public void setDeveloperId(long developerId) throws MustNotBeNull {
+        if (developerId > 0) {
+            this.developerId = developerId;
         } else {
             throw new MustNotBeNull();
         }
@@ -33,8 +42,29 @@ public class ProjectsDevelopers {
     @Override
     public String toString() {
         return "ProjectsDevelopers{" +
-                "project_id=" + getProject_id() +
-                ", developer_id=" + getDeveloper_id() +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", developerId=" + developerId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProjectsDevelopers)) return false;
+
+        ProjectsDevelopers that = (ProjectsDevelopers) o;
+
+        if (getId() != that.getId()) return false;
+        if (getProjectId() != that.getProjectId()) return false;
+        return getDeveloperId() == that.getDeveloperId();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (int) (getProjectId() ^ (getProjectId() >>> 32));
+        result = 31 * result + (int) (getDeveloperId() ^ (getDeveloperId() >>> 32));
+        return result;
     }
 }

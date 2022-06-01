@@ -1,4 +1,4 @@
-CREATE TABLE company  (
+CREATE TABLE companies  (
     id IDENTITY PRIMARY KEY,
     name VARCHAR(200),
     description VARCHAR(200)
@@ -20,14 +20,12 @@ CREATE TABLE projects (
 );
 
 ALTER TABLE projects
-ADD CONSTRAINT company_id_fk
-FOREIGN KEY(company_id)
-REFERENCES company(id);
+ADD CONSTRAINT company_id
+FOREIGN KEY (company_id) REFERENCES companies(id);
 
 ALTER TABLE projects
-ADD CONSTRAINT customer_id_fk
-FOREIGN KEY(customer_id)
-REFERENCES customers(id);
+ADD CONSTRAINT customer_id
+FOREIGN KEY (customer_id) REFERENCES customers(id);
 
 CREATE TABLE developers (
     id IDENTITY PRIMARY KEY,
@@ -35,7 +33,7 @@ CREATE TABLE developers (
     second_name VARCHAR(50),
     age INT,
     gender VARCHAR(10) NOT NULL,
-    CHECK(0 < age and age < 150),
+    CHECK(0 <= age and age <= 150),
     CHECK(gender IN('male', 'female'))
 );
 

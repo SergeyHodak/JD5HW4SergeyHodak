@@ -14,8 +14,8 @@ class DevelopersTests {
         Developers developers = new Developers();
         String result = "Developers{" +
                 "id=" + 0 +
-                ", first_name='" + null + '\'' +
-                ", second_name='" + null + '\'' +
+                ", firstName='" + null + '\'' +
+                ", secondName='" + null + '\'' +
                 ", age=" + 0 +
                 ", gender=" + null +
                 '}';
