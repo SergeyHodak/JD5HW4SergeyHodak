@@ -1,85 +1,60 @@
 package tables.projectsDevelopers;
 
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NumberOfCharactersExceedsTheLimit;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import prefs.Prefs;
-import storage.DatabaseInitService;
-import tables.companies.Companies;
-import tables.companies.CompaniesDaoService;
-import tables.customers.Customers;
-import tables.customers.CustomersDaoService;
-import tables.developers.Developers;
-import tables.developers.DevelopersDaoService;
-import tables.projects.Projects;
-import tables.projects.ProjectsDaoService;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 class ProjectsDevelopersDaoServiceTests {
-    private Connection connection;
-    private ProjectsDevelopersDaoService daoService;
-    private CompaniesDaoService companiesDaoService;
-    private CustomersDaoService customersDaoService;
-    private ProjectsDaoService projectsDaoService;
-    private DevelopersDaoService developersDaoService;
-
-    @BeforeEach
-    public void beforeEach() throws SQLException {
-        String connectionUrl = new Prefs().getString("testDbUrl");
-        new DatabaseInitService().initDb(connectionUrl);
-        connection = DriverManager.getConnection(connectionUrl);
-
-        daoService = new ProjectsDevelopersDaoService(connection);
-        companiesDaoService = new CompaniesDaoService(connection);
-        customersDaoService = new CustomersDaoService(connection);
-        projectsDaoService = new ProjectsDaoService(connection);
-        developersDaoService = new DevelopersDaoService(connection);
-
-        daoService.clear();
-    }
-
-    @AfterEach
-    public void afterEach() throws SQLException {
-        connection.close();
-    }
-
-    @Test
-    public void testCreate() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
-        Companies companies = new Companies();
-        companies.setName("TestNameCompany");
-        companies.setDescription("TestDescriptionCompany");
-        companiesDaoService.create(companies);
-
-        Customers customers = new Customers();
-        customers.setFirstName("TestUpdateFirstName");
-        customers.setSecondName("TestUpdateSecondName");
-        customers.setAge(49);
-        customersDaoService.create(customers);
-
-        Projects projects = new Projects();
-        projects.setName("TestName");
-        projects.setCompanyId(1);
-        projects.setCustomerId(1);
-        projectsDaoService.create(projects);
-
-        Developers developers = new Developers();
-        developers.setFirstName("TestFirstName");
-        developers.setSecondName("TestSecondName");
-        developers.setAge(28);
-        developers.setGender(Developers.Gender.male);
-        developersDaoService.create(developers);
-
-        int[][] valuesForCreate = {{1, 1}, {2, 1}, {1, 2}, {1, 0}, {0, 1}};
+//    private Connection connection;
+//    private ProjectsDevelopersDaoService daoService;
+//    private CompanyDaoService companyDaoService;
+//    private CustomerDaoService customersDaoService;
+//    private ProjectsDaoService projectsDaoService;
+//    private DevelopersDaoService developersDaoService;
+//
+//    @BeforeEach
+//    public void beforeEach() throws SQLException {
+//        String connectionUrl = new Prefs().getString("testDbUrl");
+//        new DatabaseInitService().initDb(connectionUrl);
+//        connection = DriverManager.getConnection(connectionUrl);
+//
+//        daoService = new ProjectsDevelopersDaoService(connection);
+//        companyDaoService = new CompanyDaoService(connection);
+//        customersDaoService = new CustomerDaoService(connection);
+//        projectsDaoService = new ProjectsDaoService(connection);
+//        developersDaoService = new DevelopersDaoService(connection);
+//
+//        daoService.clear();
+//    }
+//
+//    @AfterEach
+//    public void afterEach() throws SQLException {
+//        connection.close();
+//    }
+//
+//    @Test
+//    public void testCreate() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+//        Company company = new Company();
+//        company.setName("TestNameCompany");
+//        company.setDescription("TestDescriptionCompany");
+//        companyDaoService.create(company);
+//
+//        Customer customer = new Customer();
+//        customer.setFirstName("TestUpdateFirstName");
+//        customer.setSecondName("TestUpdateSecondName");
+//        customer.setAge(49);
+//        customersDaoService.create(customer);
+//
+//        Projects projects = new Projects();
+//        projects.setName("TestName");
+//        projects.setCompanyId(1);
+//        projects.setCustomerId(1);
+//        projectsDaoService.create(projects);
+//
+//        Developers developers = new Developers();
+//        developers.setFirstName("TestFirstName");
+//        developers.setSecondName("TestSecondName");
+//        developers.setAge(28);
+//        developers.setGender(Developers.Gender.male);
+//        developersDaoService.create(developers);
+//
+//        int[][] valuesForCreate = {{1, 1}, {2, 1}, {1, 2}, {1, 0}, {0, 1}};
 
 //        for (int[] create : valuesForCreate) {
 //            try {
@@ -96,20 +71,20 @@ class ProjectsDevelopersDaoServiceTests {
 //                Assertions.assertNotEquals("", thrown.getMessage());
 //            }
 //        }
-    }
+//    }
 
 //    @Test
 //    public void getAllTest() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
-//        Companies companies = new Companies();
-//        companies.setName("TestNameCompany");
-//        companies.setDescription("TestDescriptionCompany");
-//        companiesDaoService.create(companies);
+//        Company company = new Company();
+//        company.setName("TestNameCompany");
+//        company.setDescription("TestDescriptionCompany");
+//        companyDaoService.create(company);
 //
-//        Customers customers = new Customers();
-//        customers.setFirstName("TestFirstName");
-//        customers.setSecondName("TestSecondName");
-//        customers.setAge(19);
-//        customersDaoService.create(customers);
+//        Customer customer = new Customer();
+//        customer.setFirstName("TestFirstName");
+//        customer.setSecondName("TestSecondName");
+//        customer.setAge(19);
+//        customersDaoService.create(customer);
 //
 //        Projects expected = new Projects();
 //        expected.setName("TestName");
@@ -127,23 +102,23 @@ class ProjectsDevelopersDaoServiceTests {
 //
 //    @Test
 //    public void testUpdate() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
-//        Companies companies = new Companies();
-//        companies.setName("TestNameCompany");
-//        companies.setDescription("TestDescriptionCompany");
-//        companiesDaoService.create(companies);
+//        Company company = new Company();
+//        company.setName("TestNameCompany");
+//        company.setDescription("TestDescriptionCompany");
+//        companyDaoService.create(company);
 //
-//        Companies companies2 = new Companies();
+//        Company companies2 = new Company();
 //        companies2.setName("TestNameCompany2");
 //        companies2.setDescription("TestDescriptionCompany2");
-//        companiesDaoService.create(companies2);
+//        companyDaoService.create(companies2);
 //
-//        Customers customers = new Customers();
-//        customers.setFirstName("TestFirstName");
-//        customers.setSecondName("TestSecondName");
-//        customers.setAge(19);
-//        customersDaoService.create(customers);
+//        Customer customer = new Customer();
+//        customer.setFirstName("TestFirstName");
+//        customer.setSecondName("TestSecondName");
+//        customer.setAge(19);
+//        customersDaoService.create(customer);
 //
-//        Customers customers2 = new Customers();
+//        Customer customers2 = new Customer();
 //        customers2.setFirstName("TestFirstName2");
 //        customers2.setSecondName("TestSecondName2");
 //        customers2.setAge(20);
@@ -209,16 +184,16 @@ class ProjectsDevelopersDaoServiceTests {
 //
 //    @Test
 //    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
-//        Companies companies = new Companies();
-//        companies.setName("TestNameCompany");
-//        companies.setDescription("TestDescriptionCompany");
-//        companiesDaoService.create(companies);
+//        Company company = new Company();
+//        company.setName("TestNameCompany");
+//        company.setDescription("TestDescriptionCompany");
+//        companyDaoService.create(company);
 //
-//        Customers customers = new Customers();
-//        customers.setFirstName("TestFirstName");
-//        customers.setSecondName("TestSecondName");
-//        customers.setAge(19);
-//        customersDaoService.create(customers);
+//        Customer customer = new Customer();
+//        customer.setFirstName("TestFirstName");
+//        customer.setSecondName("TestSecondName");
+//        customer.setAge(19);
+//        customersDaoService.create(customer);
 //
 //        Projects expected = new Projects();
 //        expected.setName("TestName");

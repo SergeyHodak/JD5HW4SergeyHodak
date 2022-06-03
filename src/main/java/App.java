@@ -4,10 +4,10 @@ import exceptions.NumberOfCharactersExceedsTheLimit;
 import prefs.Prefs;
 import storage.DatabaseInitService;
 import storage.Storage;
-import tables.companies.Companies;
-import tables.companies.CompaniesDaoService;
-import tables.customers.Customers;
-import tables.customers.CustomersDaoService;
+import tables.company.Company;
+import tables.company.CompanyDaoService;
+import tables.customer.Customer;
+import tables.customer.CustomerDaoService;
 import tables.developers.Developers;
 import tables.developers.DevelopersDaoService;
 import tables.projects.Projects;
@@ -23,51 +23,51 @@ public class App {
         Storage storage = Storage.getInstance();
 
 
-        CompaniesDaoService companiesDaoService = new CompaniesDaoService(storage.getConnection());
-        List<Companies> companies = new ArrayList<>();
+        CompanyDaoService companyDaoService = new CompanyDaoService(storage.getConnection());
+        List<Company> companies = new ArrayList<>();
 
-        Companies companies1 = new Companies();
-        companies1.setName("Future Technology");
-        companies1.setDescription("Approaching humanity to the near future");
-        companies.add(companies1);
+        Company company1 = new Company();
+        company1.setName("Future Technology");
+        company1.setDescription("Approaching humanity to the near future");
+        companies.add(company1);
 
-        Companies companies2 = new Companies();
-        companies2.setName("Agro firm");
-        companies2.setDescription("Intellectual provision of agricultural machinery");
-        companies.add(companies2);
+        Company company2 = new Company();
+        company2.setName("Agro firm");
+        company2.setDescription("Intellectual provision of agricultural machinery");
+        companies.add(company2);
 
-        Companies companies3 = new Companies();
-        companies3.setName("Integrate and use");
-        companies3.setDescription("Moving your business to the digital world");
-        companies.add(companies3);
+        Company company3 = new Company();
+        company3.setName("Integrate and use");
+        company3.setDescription("Moving your business to the digital world");
+        companies.add(company3);
 
-        for (Companies company : companies) {
-            companiesDaoService.create(company);
+        for (Company company : companies) {
+            companyDaoService.create(company);
         }
 
-        CustomersDaoService customersDaoService = new CustomersDaoService(storage.getConnection());
-        List<Customers> customers = new ArrayList<>();
+        CustomerDaoService customerDaoService = new CustomerDaoService(storage.getConnection());
+        List<Customer> customers = new ArrayList<>();
 
-        Customers customers1 = new Customers();
-        customers1.setFirstName("Aller");
-        customers1.setSecondName("Han");
-        customers1.setAge(38);
-        customers.add(customers1);
+        Customer customer1 = new Customer();
+        customer1.setFirstName("Aller");
+        customer1.setSecondName("Han");
+        customer1.setAge(38);
+        customers.add(customer1);
 
-        Customers customers2 = new Customers();
-        customers2.setFirstName("Kevin");
-        customers2.setSecondName("Stoon");
-        customers2.setAge(34);
-        customers.add(customers2);
+        Customer customer2 = new Customer();
+        customer2.setFirstName("Kevin");
+        customer2.setSecondName("Stoon");
+        customer2.setAge(34);
+        customers.add(customer2);
 
-        Customers customers3 = new Customers();
-        customers3.setFirstName("Liz");
-        customers3.setSecondName("Krabse");
-        customers3.setAge(40);
-        customers.add(customers3);
+        Customer customer3 = new Customer();
+        customer3.setFirstName("Liz");
+        customer3.setSecondName("Krabse");
+        customer3.setAge(40);
+        customers.add(customer3);
 
-        for (Customers customer : customers) {
-            customersDaoService.create(customer);
+        for (Customer customer : customers) {
+            customerDaoService.create(customer);
         }
 
         ProjectsDaoService projectsDaoService = new ProjectsDaoService(storage.getConnection());
@@ -138,8 +138,8 @@ public class App {
             developersDaoService.create(developer);
         }
 
-        System.out.println(companiesDaoService.getAll());
-        System.out.println(customersDaoService.getAll());
+        System.out.println(companyDaoService.getAll());
+        System.out.println(customerDaoService.getAll());
         System.out.println(projectsDaoService.getAll());
         System.out.println(developersDaoService.getAll());
     }

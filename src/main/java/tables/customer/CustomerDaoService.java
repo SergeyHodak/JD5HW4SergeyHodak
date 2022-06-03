@@ -1,4 +1,4 @@
-package tables.customers;
+package tables.customer;
 
 import exceptions.AgeOutOfRange;
 import exceptions.NumberOfCharactersExceedsTheLimit;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomersDaoService {
+public class CustomerDaoService {
     private final PreparedStatement selectMaxIdSt;
     private final PreparedStatement createSt;
     private final PreparedStatement getByIdSt;
@@ -19,40 +19,40 @@ public class CustomersDaoService {
     private final PreparedStatement updateSt;
     private final PreparedStatement deleteByIdSt;
 
-    public CustomersDaoService(Connection connection) throws SQLException {
+    public CustomerDaoService(Connection connection) throws SQLException {
         selectMaxIdSt = connection.prepareStatement(
-                "SELECT max(id) AS maxId FROM customers"
+                "SELECT max(id) AS maxId FROM customer"
         );
 
         createSt = connection.prepareStatement(
-                "INSERT INTO customers (first_name, second_name, age) VALUES(?, ?, ?)"
+                "INSERT INTO customer (first_name, second_name, age) VALUES(?, ?, ?)"
         );
 
         getByIdSt = connection.prepareStatement(
-                "SELECT first_name, second_name, age FROM customers WHERE id = ?"
+                "SELECT first_name, second_name, age FROM customer WHERE id = ?"
         );
 
         clearSt = connection.prepareStatement(
-                "DELETE FROM customers"
+                "DELETE FROM customer"
         );
 
         getAllSt = connection.prepareStatement(
-                "SELECT id, first_name, second_name, age FROM customers"
+                "SELECT id, first_name, second_name, age FROM customer"
         );
 
         updateSt = connection.prepareStatement(
-                "UPDATE customers SET first_name = ?, second_name = ?, age = ? WHERE id = ?"
+                "UPDATE customer SET first_name = ?, second_name = ?, age = ? WHERE id = ?"
         );
 
         deleteByIdSt = connection.prepareStatement(
-                "DELETE FROM customers WHERE id = ?"
+                "DELETE FROM customer WHERE id = ?"
         );
     }
 
-    public long create(Customers customers) throws SQLException {
-        createSt.setString(1, customers.getFirstName());
-        createSt.setString(2, customers.getSecondName());
-        createSt.setInt(3, customers.getAge());
+    public long create(Customer customer) throws SQLException {
+        createSt.setString(1, customer.getFirstName());
+        createSt.setString(2, customer.getSecondName());
+        createSt.setInt(3, customer.getAge());
         createSt.executeUpdate();
         long id;
         try (ResultSet rs = selectMaxIdSt.executeQuery()) {
@@ -62,13 +62,13 @@ public class CustomersDaoService {
         return id;
     }
 
-    public Customers getById(long id) throws SQLException {
+    public Customer getById(long id) throws SQLException {
         getByIdSt.setLong(1, id);
         try (ResultSet rs = getByIdSt.executeQuery()) {
             if (!rs.next()) {
                 return null;
             }
-            Customers result = new Customers();
+            Customer result = new Customer();
             result.setId(id);
             result.setFirstName(rs.getString("first_name"));
             result.setSecondName(rs.getString("second_name"));
@@ -83,16 +83,16 @@ public class CustomersDaoService {
         clearSt.executeUpdate();
     }
 
-    public List<Customers> getAll() throws SQLException {
+    public List<Customer> getAll() throws SQLException {
         try(ResultSet rs = getAllSt.executeQuery()) {
-            List<Customers> result = new ArrayList<>();
+            List<Customer> result = new ArrayList<>();
             while (rs.next()) {
-                Customers customers = new Customers();
-                customers.setId(rs.getLong("id"));
-                customers.setFirstName(rs.getString("first_name"));
-                customers.setSecondName(rs.getString("second_name"));
-                customers.setAge(rs.getInt("age"));
-                result.add(customers);
+                Customer customer = new Customer();
+                customer.setId(rs.getLong("id"));
+                customer.setFirstName(rs.getString("first_name"));
+                customer.setSecondName(rs.getString("second_name"));
+                customer.setAge(rs.getInt("age"));
+                result.add(customer);
             }
             return result;
         } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
@@ -100,11 +100,11 @@ public class CustomersDaoService {
         }
     }
 
-    public void update(Customers customers) throws SQLException {
-        updateSt.setString(1, customers.getFirstName());
-        updateSt.setString(2, customers.getSecondName());
-        updateSt.setInt(3, customers.getAge());
-        updateSt.setLong(4, customers.getId());
+    public void update(Customer customer) throws SQLException {
+        updateSt.setString(1, customer.getFirstName());
+        updateSt.setString(2, customer.getSecondName());
+        updateSt.setInt(3, customer.getAge());
+        updateSt.setLong(4, customer.getId());
         updateSt.executeUpdate();
     }
 

@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.h2database:h2:2.1.210'
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
     compileOnly 'org.projectlombok:lombok:1.18.24'
 }
 
