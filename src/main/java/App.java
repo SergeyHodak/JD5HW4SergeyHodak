@@ -8,10 +8,10 @@ import tables.company.Company;
 import tables.company.CompanyDaoService;
 import tables.customer.Customer;
 import tables.customer.CustomerDaoService;
-import tables.developers.Developers;
-import tables.developers.DevelopersDaoService;
-import tables.projects.Projects;
-import tables.projects.ProjectsDaoService;
+import tables.developer.Developer;
+import tables.developer.DeveloperDaoService;
+import tables.project.Project;
+import tables.project.ProjectDaoService;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -70,80 +70,80 @@ public class App {
             customerDaoService.create(customer);
         }
 
-        ProjectsDaoService projectsDaoService = new ProjectsDaoService(storage.getConnection());
-        List<Projects>  projects = new ArrayList<>();
+        ProjectDaoService projectDaoService = new ProjectDaoService(storage.getConnection());
+        List<Project>  projects = new ArrayList<>();
 
-        Projects project1 = new Projects();
+        Project project1 = new Project();
         project1.setName("Artificial intelligence for milling machine");
         project1.setCompanyId(1);
         project1.setCustomerId(2);
         projects.add(project1);
 
-        Projects project2 = new Projects();
+        Project project2 = new Project();
         project2.setName("App for simple options");
         project2.setCompanyId(3);
         project2.setCustomerId(1);
         projects.add(project2);
 
-        Projects project3 = new Projects();
+        Project project3 = new Project();
         project3.setName("Finding profitable ways to exchange currencies");
         project3.setCompanyId(1);
         project3.setCustomerId(1);
         projects.add(project3);
 
-        for (Projects project : projects) {
-            projectsDaoService.create(project);
+        for (Project project : projects) {
+            projectDaoService.create(project);
         }
 
 
-        DevelopersDaoService developersDaoService = new DevelopersDaoService(storage.getConnection());
-        List<Developers>  developers = new ArrayList<>();
+        DeveloperDaoService developerDaoService = new DeveloperDaoService(storage.getConnection());
+        List<Developer>  developers = new ArrayList<>();
 
-        Developers developer1 = new Developers();
+        Developer developer1 = new Developer();
         developer1.setFirstName("Did");
         developer1.setFirstName("Panas");
         developer1.setAge(61);
-        developer1.setGender(Developers.Gender.male);
+        developer1.setGender(Developer.Gender.male);
         developers.add(developer1);
 
-        Developers developer2 = new Developers();
+        Developer developer2 = new Developer();
         developer2.setFirstName("Fedir");
         developer2.setFirstName("Tomson");
         developer2.setAge(45);
-        developer2.setGender(Developers.Gender.male);
+        developer2.setGender(Developer.Gender.male);
         developers.add(developer2);
 
-        Developers developer3 = new Developers();
+        Developer developer3 = new Developer();
         developer3.setFirstName("Olga");
         developer3.setFirstName("Dzi");
         developer3.setAge(50);
-        developer3.setGender(Developers.Gender.female);
+        developer3.setGender(Developer.Gender.female);
         developers.add(developer3);
 
-        Developers developer4 = new Developers();
+        Developer developer4 = new Developer();
         developer4.setFirstName("Oleg");
         developer4.setFirstName("Filli");
         developer4.setAge(23);
-        developer4.setGender(Developers.Gender.male);
+        developer4.setGender(Developer.Gender.male);
         developers.add(developer4);
 
-        Developers developer5 = new Developers();
+        Developer developer5 = new Developer();
         developer5.setFirstName("Nina");
         developer5.setFirstName("Weendi");
         developer5.setAge(24);
-        developer5.setGender(Developers.Gender.female);
+        developer5.setGender(Developer.Gender.female);
         developers.add(developer5);
 
-        for (Developers developer : developers) {
-            developersDaoService.create(developer);
+        for (Developer developer : developers) {
+            developerDaoService.create(developer);
         }
 
         System.out.println(companyDaoService.getAll());
         System.out.println(customerDaoService.getAll());
-        System.out.println(projectsDaoService.getAll());
-        System.out.println(developersDaoService.getAll());
+        System.out.println(projectDaoService.getAll());
+        System.out.println(developerDaoService.getAll());
     }
-//      INSERT INTO projects_developers (project_id, developer_id) VALUES
+//      INSERT INTO project_developer (project_id, developer_id) VALUES
 //      (1, 1),
 //      (1, 3),
 //      (1, 5),
@@ -167,7 +167,7 @@ public class App {
 //    (2, 3),
 //    (
 //      SELECT id
-//      FROM developers
+//      FROM developer
 //      WHERE name_surname='Olga Dzi',
 //      SELECT id
 //      FROM skills

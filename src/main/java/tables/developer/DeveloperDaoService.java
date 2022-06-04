@@ -1,4 +1,4 @@
-package tables.developers;
+package tables.developer;
 
 import exceptions.AgeOutOfRange;
 import exceptions.NumberOfCharactersExceedsTheLimit;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DevelopersDaoService {
+public class DeveloperDaoService {
     private final PreparedStatement selectMaxIdSt;
     private final PreparedStatement createSt;
     private final PreparedStatement getByIdSt;
@@ -19,41 +19,41 @@ public class DevelopersDaoService {
     private final PreparedStatement updateSt;
     private final PreparedStatement deleteByIdSt;
 
-    public DevelopersDaoService(Connection connection) throws SQLException {
+    public DeveloperDaoService(Connection connection) throws SQLException {
         selectMaxIdSt = connection.prepareStatement(
-                "SELECT max(id) AS maxId FROM developers"
+                "SELECT max(id) AS maxId FROM developer"
         );
 
         createSt = connection.prepareStatement(
-                "INSERT INTO developers (first_name, second_name, age, gender) VALUES(?, ?, ?, ?)"
+                "INSERT INTO developer (first_name, second_name, age, gender) VALUES(?, ?, ?, ?)"
         );
 
         getByIdSt = connection.prepareStatement(
-                "SELECT first_name, second_name, age, gender FROM developers WHERE id = ?"
+                "SELECT first_name, second_name, age, gender FROM developer WHERE id = ?"
         );
 
         clearSt = connection.prepareStatement(
-                "DELETE FROM developers"
+                "DELETE FROM developer"
         );
 
         getAllSt = connection.prepareStatement(
-                "SELECT id, first_name, second_name, age, gender FROM developers"
+                "SELECT id, first_name, second_name, age, gender FROM developer"
         );
 
         updateSt = connection.prepareStatement(
-                "UPDATE developers SET first_name = ?, second_name = ?, age = ?, gender = ? WHERE id = ?"
+                "UPDATE developer SET first_name = ?, second_name = ?, age = ?, gender = ? WHERE id = ?"
         );
 
         deleteByIdSt = connection.prepareStatement(
-                "DELETE FROM developers WHERE id = ?"
+                "DELETE FROM developer WHERE id = ?"
         );
     }
 
-    public long create(Developers developers) throws SQLException {
-        createSt.setString(1, developers.getFirstName());
-        createSt.setString(2, developers.getSecondName());
-        createSt.setInt(3, developers.getAge());
-        createSt.setString(4, developers.getGender().name());
+    public long create(Developer developer) throws SQLException {
+        createSt.setString(1, developer.getFirstName());
+        createSt.setString(2, developer.getSecondName());
+        createSt.setInt(3, developer.getAge());
+        createSt.setString(4, developer.getGender().name());
         createSt.executeUpdate();
         long id;
         try (ResultSet rs = selectMaxIdSt.executeQuery()) {
@@ -63,18 +63,18 @@ public class DevelopersDaoService {
         return id;
     }
 
-    public Developers getById(long id) throws SQLException {
+    public Developer getById(long id) throws SQLException {
         getByIdSt.setLong(1, id);
         try (ResultSet rs = getByIdSt.executeQuery()) {
             if (!rs.next()) {
                 return null;
             }
-            Developers result = new Developers();
+            Developer result = new Developer();
             result.setId(id);
             result.setFirstName(rs.getString("first_name"));
             result.setSecondName(rs.getString("second_name"));
             result.setAge(rs.getInt("age"));
-            result.setGender(Developers.Gender.valueOf(rs.getString("gender")));
+            result.setGender(Developer.Gender.valueOf(rs.getString("gender")));
             return result;
         } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
             throw new RuntimeException(e);
@@ -85,17 +85,17 @@ public class DevelopersDaoService {
         clearSt.executeUpdate();
     }
 
-    public List<Developers> getAll() throws SQLException {
+    public List<Developer> getAll() throws SQLException {
         try(ResultSet rs = getAllSt.executeQuery()) {
-            List<Developers> result = new ArrayList<>();
+            List<Developer> result = new ArrayList<>();
             while (rs.next()) {
-                Developers developers = new Developers();
-                developers.setId(rs.getLong("id"));
-                developers.setFirstName(rs.getString("first_name"));
-                developers.setSecondName(rs.getString("second_name"));
-                developers.setAge(rs.getInt("age"));
-                developers.setGender(Developers.Gender.valueOf(rs.getString("gender")));
-                result.add(developers);
+                Developer developer = new Developer();
+                developer.setId(rs.getLong("id"));
+                developer.setFirstName(rs.getString("first_name"));
+                developer.setSecondName(rs.getString("second_name"));
+                developer.setAge(rs.getInt("age"));
+                developer.setGender(Developer.Gender.valueOf(rs.getString("gender")));
+                result.add(developer);
             }
             return result;
         } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
@@ -103,12 +103,12 @@ public class DevelopersDaoService {
         }
     }
 
-    public void update(Developers developers) throws SQLException {
-        updateSt.setString(1, developers.getFirstName());
-        updateSt.setString(2, developers.getSecondName());
-        updateSt.setInt(3, developers.getAge());
-        updateSt.setString(4, developers.getGender().name());
-        updateSt.setLong(5, developers.getId());
+    public void update(Developer developer) throws SQLException {
+        updateSt.setString(1, developer.getFirstName());
+        updateSt.setString(2, developer.getSecondName());
+        updateSt.setInt(3, developer.getAge());
+        updateSt.setString(4, developer.getGender().name());
+        updateSt.setLong(5, developer.getId());
         updateSt.executeUpdate();
     }
 

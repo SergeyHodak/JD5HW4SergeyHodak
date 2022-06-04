@@ -8,12 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import prefs.Prefs;
 import storage.DatabaseInitService;
-import tables.company.Company;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -114,7 +112,7 @@ class CustomerDaoServiceTests {
 
                 Customer saved = daoService.getById(id);
 
-                Assertions.assertEquals(saved.getId(), id);
+                Assertions.assertEquals(saved.getId(), original.getId());
                 Assertions.assertEquals(saved.getFirstName(), update[0]);
                 Assertions.assertEquals(saved.getSecondName(), update[1]);
                 Assertions.assertEquals(saved.getAge(), Integer.parseInt(update[2]));

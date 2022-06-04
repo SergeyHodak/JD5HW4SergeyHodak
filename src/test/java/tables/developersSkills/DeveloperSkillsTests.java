@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tables.developersSkills.DevelopersSkills;
 
-class DevelopersSkillsTests {
+class DeveloperSkillsTests {
     @Test
     public void testToStringAndGetters() {
         DevelopersSkills developersSkills = new DevelopersSkills();

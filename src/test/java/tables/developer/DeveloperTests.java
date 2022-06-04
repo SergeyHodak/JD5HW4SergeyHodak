@@ -1,4 +1,4 @@
-package tables.developers;
+package tables.developer;
 
 import exceptions.AgeOutOfRange;
 import exceptions.NumberOfCharactersExceedsTheLimit;
@@ -8,31 +8,19 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-class DevelopersTests {
-    @Test
-    public void testToStringAndGetters() {
-        Developers developers = new Developers();
-        String result = "Developers{" +
-                "id=" + 0 +
-                ", firstName='" + null + '\'' +
-                ", secondName='" + null + '\'' +
-                ", age=" + 0 +
-                ", gender=" + null +
-                '}';
-        Assertions.assertEquals(result, developers.toString());
-    }
-
+class DeveloperTests {
     @Test
     public void testSetFirst_name() {
         List<String> sets = new ArrayList<>();
         sets.add("Test".repeat(5));
         sets.add("Test".repeat(30));
+        sets.add(null);
 
         for (String set : sets) {
             try {
-                Developers developers = new Developers();
-                developers.setFirstName(set);
-                Assertions.assertEquals(set, developers.getFirstName());
+                Developer developer = new Developer();
+                developer.setFirstName(set);
+                Assertions.assertEquals(set, developer.getFirstName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -44,12 +32,13 @@ class DevelopersTests {
         List<String> sets = new ArrayList<>();
         sets.add("Test".repeat(7));
         sets.add("Test".repeat(31));
+        sets.add(null);
 
         for (String set : sets) {
             try {
-                Developers developers = new Developers();
-                developers.setSecondName(set);
-                Assertions.assertEquals(set, developers.getSecondName());
+                Developer developer = new Developer();
+                developer.setSecondName(set);
+                Assertions.assertEquals(set, developer.getSecondName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -61,9 +50,9 @@ class DevelopersTests {
         int[] sets = {18, 50, 180, 0, -50};
         for (int set : sets) {
             try {
-                Developers developers = new Developers();
-                developers.setAge(set);
-                Assertions.assertEquals(set, developers.getAge());
+                Developer developer = new Developer();
+                developer.setAge(set);
+                Assertions.assertEquals(set, developer.getAge());
             } catch (AgeOutOfRange thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
