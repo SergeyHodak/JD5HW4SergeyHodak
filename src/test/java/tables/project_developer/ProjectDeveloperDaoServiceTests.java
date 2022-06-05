@@ -21,6 +21,7 @@ import tables.project.ProjectDaoService;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +29,9 @@ class ProjectDeveloperDaoServiceTests {
     private Connection connection;
 
     private CompanyDaoService companyDaoService;
-    private CustomerDaoService customersDaoService;
-    private ProjectDaoService projectsDaoService;
-    private DeveloperDaoService developersDaoService;
+    private CustomerDaoService customerDaoService;
+    private ProjectDaoService projectDaoService;
+    private DeveloperDaoService developerDaoService;
 
     private ProjectDeveloperDaoService daoService;
 
@@ -41,9 +42,9 @@ class ProjectDeveloperDaoServiceTests {
         connection = DriverManager.getConnection(connectionUrl);
 
         companyDaoService = new CompanyDaoService(connection);
-        customersDaoService = new CustomerDaoService(connection);
-        projectsDaoService = new ProjectDaoService(connection);
-        developersDaoService = new DeveloperDaoService(connection);
+        customerDaoService = new CustomerDaoService(connection);
+        projectDaoService = new ProjectDaoService(connection);
+        developerDaoService = new DeveloperDaoService(connection);
 
         daoService = new ProjectDeveloperDaoService(connection);
         daoService.clear();
@@ -61,19 +62,19 @@ class ProjectDeveloperDaoServiceTests {
             setDescription("TestDescriptionCompany");
         }});
 
-        customersDaoService.create(new Customer() {{
+        customerDaoService.create(new Customer() {{
             setFirstName("TestUpdateFirstName");
             setSecondName("TestUpdateSecondName");
             setAge(49);
         }});
 
-        projectsDaoService.create(new Project() {{
+        projectDaoService.create(new Project() {{
             setName("TestName");
             setCompanyId(1);
             setCustomerId(1);
         }});
 
-        developersDaoService.create(new Developer() {{
+        developerDaoService.create(new Developer() {{
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
@@ -106,19 +107,19 @@ class ProjectDeveloperDaoServiceTests {
             setDescription("TestDescriptionCompany");
         }});
 
-        customersDaoService.create(new Customer() {{
+        customerDaoService.create(new Customer() {{
             setFirstName("TestUpdateFirstName");
             setSecondName("TestUpdateSecondName");
             setAge(49);
         }});
 
-        projectsDaoService.create(new Project() {{
+        projectDaoService.create(new Project() {{
             setName("TestName");
             setCompanyId(1);
             setCustomerId(1);
         }});
 
-        developersDaoService.create(new Developer() {{
+        developerDaoService.create(new Developer() {{
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
@@ -134,6 +135,144 @@ class ProjectDeveloperDaoServiceTests {
         List<ProjectDeveloper> actualProjectsDevelopers = daoService.getAll();
 
         Assertions.assertEquals(expectedProjectsDevelopers, actualProjectsDevelopers);
+    }
+
+    @Test
+    public void testGetAllByProjectId() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+        companyDaoService.create(new Company() {{
+            setName("TestNameCompany");
+            setDescription("TestDescriptionCompany");
+        }});
+
+        customerDaoService.create(new Customer() {{
+            setFirstName("TestUpdateFirstName");
+            setSecondName("TestUpdateSecondName");
+            setAge(49);
+        }});
+
+        String[][] valuesForCreateProjects = {
+                {"TestName", "1", "1"},
+                {"TestName1", "1", "1"},
+                {"TestName2", "1", "1"}
+        };
+
+        for (String[] valuesForCreateProject : valuesForCreateProjects) {
+            projectDaoService.create(new Project() {{
+                setName(valuesForCreateProject[0]);
+                setCompanyId(Long.parseLong(valuesForCreateProject[1]));
+                setCustomerId(Long.parseLong(valuesForCreateProject[2]));
+            }});
+        }
+
+        String[][] valuesForCreateDevelopers = {
+                {"TestFirstName", "TestSecondName", "28", "male"},
+                {"TestFirstName1", "TestSecondName1", "29", "male"},
+                {"TestFirstName2", "TestSecondName2", "30", "male"}
+        };
+
+        for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
+            developerDaoService.create(new Developer() {{
+                setFirstName(valuesForCreateDeveloper[0]);
+                setSecondName(valuesForCreateDeveloper[1]);
+                setAge(Integer.parseInt(valuesForCreateDeveloper[2]));
+                setGender(Gender.valueOf(valuesForCreateDeveloper[3]));
+            }});
+        }
+
+        long[][] valuesForCreateDependencies = {
+                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+        };
+
+        List<ProjectDeveloper> expectedProjectsDevelopers = new ArrayList<>();
+
+        for (long[] valuesForCreateDependency : valuesForCreateDependencies) {
+            ProjectDeveloper expected = new ProjectDeveloper();
+            expected.setProjectId(valuesForCreateDependency[0]);
+            expected.setDeveloperId(valuesForCreateDependency[1]);
+            daoService.create(expected);
+            expectedProjectsDevelopers.add(expected);
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            List<ProjectDeveloper> test = new ArrayList<>();
+            for (ProjectDeveloper expectedProjectsDeveloper : expectedProjectsDevelopers) {
+                if (expectedProjectsDeveloper.getProjectId() == i) {
+                    test.add(expectedProjectsDeveloper);
+                }
+            }
+
+            List<ProjectDeveloper> actualProjectsDevelopers = daoService.getAllByProjectId(i);
+            Assertions.assertEquals(test, actualProjectsDevelopers);
+        }
+    }
+
+    @Test
+    public void testGetAllByDeveloperId() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+        companyDaoService.create(new Company() {{
+            setName("TestNameCompany");
+            setDescription("TestDescriptionCompany");
+        }});
+
+        customerDaoService.create(new Customer() {{
+            setFirstName("TestUpdateFirstName");
+            setSecondName("TestUpdateSecondName");
+            setAge(49);
+        }});
+
+        String[][] valuesForCreateProjects = {
+                {"TestName", "1", "1"},
+                {"TestName1", "1", "1"},
+                {"TestName2", "1", "1"}
+        };
+
+        for (String[] valuesForCreateProject : valuesForCreateProjects) {
+            projectDaoService.create(new Project() {{
+                setName(valuesForCreateProject[0]);
+                setCompanyId(Long.parseLong(valuesForCreateProject[1]));
+                setCustomerId(Long.parseLong(valuesForCreateProject[2]));
+            }});
+        }
+
+        String[][] valuesForCreateDevelopers = {
+                {"TestFirstName", "TestSecondName", "28", "male"},
+                {"TestFirstName1", "TestSecondName1", "29", "male"},
+                {"TestFirstName2", "TestSecondName2", "30", "male"}
+        };
+
+        for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
+            developerDaoService.create(new Developer() {{
+                setFirstName(valuesForCreateDeveloper[0]);
+                setSecondName(valuesForCreateDeveloper[1]);
+                setAge(Integer.parseInt(valuesForCreateDeveloper[2]));
+                setGender(Gender.valueOf(valuesForCreateDeveloper[3]));
+            }});
+        }
+
+        long[][] valuesForCreateDependencies = {
+                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+        };
+
+        List<ProjectDeveloper> expectedProjectsDevelopers = new ArrayList<>();
+
+        for (long[] valuesForCreateDependency : valuesForCreateDependencies) {
+            ProjectDeveloper expected = new ProjectDeveloper();
+            expected.setProjectId(valuesForCreateDependency[0]);
+            expected.setDeveloperId(valuesForCreateDependency[1]);
+            daoService.create(expected);
+            expectedProjectsDevelopers.add(expected);
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            List<ProjectDeveloper> test = new ArrayList<>();
+            for (ProjectDeveloper expectedProjectsDeveloper : expectedProjectsDevelopers) {
+                if (expectedProjectsDeveloper.getDeveloperId() == i) {
+                    test.add(expectedProjectsDeveloper);
+                }
+            }
+
+            List<ProjectDeveloper> actualProjectsDevelopers = daoService.getAllByDeveloperId(i);
+            Assertions.assertEquals(test, actualProjectsDevelopers);
+        }
     }
 
 //    @Test
@@ -152,13 +291,13 @@ class ProjectDeveloperDaoServiceTests {
 //        customer.setFirstName("TestFirstName");
 //        customer.setSecondName("TestSecondName");
 //        customer.setAge(19);
-//        customersDaoService.create(customer);
+//        customerDaoService.create(customer);
 //
 //        Customer customers2 = new Customer();
 //        customers2.setFirstName("TestFirstName2");
 //        customers2.setSecondName("TestSecondName2");
 //        customers2.setAge(20);
-//        customersDaoService.create(customers2);
+//        customerDaoService.create(customers2);
 //
 //        Project original = new Project();
 //        original.setName("TestName");
@@ -229,7 +368,7 @@ class ProjectDeveloperDaoServiceTests {
 //        customer.setFirstName("TestFirstName");
 //        customer.setSecondName("TestSecondName");
 //        customer.setAge(19);
-//        customersDaoService.create(customer);
+//        customerDaoService.create(customer);
 //
 //        Project expected = new Project();
 //        expected.setName("TestName");

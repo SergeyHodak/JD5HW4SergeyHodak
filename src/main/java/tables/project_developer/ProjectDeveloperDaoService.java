@@ -1,7 +1,6 @@
 package tables.project_developer;
 
 import exceptions.MustNotBeNull;
-import lombok.Getter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +14,8 @@ public class ProjectDeveloperDaoService {
     private final PreparedStatement clearSt;
     private final PreparedStatement existEntrySt;
     private final PreparedStatement getAllSt;
+    private final PreparedStatement getAllByProjectIdSt;
+    private final PreparedStatement getAllByDeveloperIdSt;
 //    private final PreparedStatement updateSt;
 
     public ProjectDeveloperDaoService(Connection connection) throws SQLException {
@@ -32,6 +33,14 @@ public class ProjectDeveloperDaoService {
 
         getAllSt = connection.prepareStatement(
                 "SELECT project_id, developer_id FROM project_developer"
+        );
+
+        getAllByProjectIdSt = connection.prepareStatement(
+                "SELECT project_id, developer_id FROM project_developer WHERE project_id = ?"
+        );
+
+        getAllByDeveloperIdSt = connection.prepareStatement(
+                "SELECT project_id, developer_id FROM project_developer WHERE developer_id = ?"
         );
 
 //        updateSt = connection.prepareStatement(
@@ -61,6 +70,38 @@ public class ProjectDeveloperDaoService {
 
     public List<ProjectDeveloper> getAll() throws SQLException {
         try(ResultSet rs = getAllSt.executeQuery()) {
+            List<ProjectDeveloper> result = new ArrayList<>();
+            while (rs.next()) {
+                ProjectDeveloper projectDeveloper = new ProjectDeveloper();
+                projectDeveloper.setProjectId(rs.getLong("project_id"));
+                projectDeveloper.setDeveloperId(rs.getLong("developer_id"));
+                result.add(projectDeveloper);
+            }
+            return result;
+        } catch (MustNotBeNull e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ProjectDeveloper> getAllByProjectId(long projectId) throws SQLException {
+        getAllByProjectIdSt.setLong(1, projectId);
+        try(ResultSet rs = getAllByProjectIdSt.executeQuery()) {
+            List<ProjectDeveloper> result = new ArrayList<>();
+            while (rs.next()) {
+                ProjectDeveloper projectDeveloper = new ProjectDeveloper();
+                projectDeveloper.setProjectId(rs.getLong("project_id"));
+                projectDeveloper.setDeveloperId(rs.getLong("developer_id"));
+                result.add(projectDeveloper);
+            }
+            return result;
+        } catch (MustNotBeNull e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ProjectDeveloper> getAllByDeveloperId(long developerId) throws SQLException {
+        getAllByDeveloperIdSt.setLong(1, developerId);
+        try(ResultSet rs = getAllByDeveloperIdSt.executeQuery()) {
             List<ProjectDeveloper> result = new ArrayList<>();
             while (rs.next()) {
                 ProjectDeveloper projectDeveloper = new ProjectDeveloper();
