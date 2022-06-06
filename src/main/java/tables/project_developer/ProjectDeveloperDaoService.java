@@ -16,7 +16,8 @@ public class ProjectDeveloperDaoService {
     private final PreparedStatement getAllSt;
     private final PreparedStatement getAllByProjectIdSt;
     private final PreparedStatement getAllByDeveloperIdSt;
-//    private final PreparedStatement updateSt;
+    private final PreparedStatement updateSt;
+    private final PreparedStatement deleteSt;
 
     public ProjectDeveloperDaoService(Connection connection) throws SQLException {
         createSt = connection.prepareStatement(
@@ -43,9 +44,13 @@ public class ProjectDeveloperDaoService {
                 "SELECT project_id, developer_id FROM project_developer WHERE developer_id = ?"
         );
 
-//        updateSt = connection.prepareStatement(
-//                "UPDATE project SET name = ?, company_id = ?, customer_id = ? WHERE id = ?"
-//        );
+        updateSt = connection.prepareStatement(
+                "UPDATE project_developer SET project_id = ?, developer_id = ? WHERE project_id = ? AND developer_id = ?"
+        );
+
+        deleteSt = connection.prepareStatement(
+                "DELETE FROM project_developer WHERE project_id = ? AND developer_id = ?"
+        );
     }
 
     public boolean create(ProjectDeveloper project_developer) throws SQLException {
@@ -115,11 +120,17 @@ public class ProjectDeveloperDaoService {
         }
     }
 
-//    public void update(Project project) throws SQLException {
-//        updateSt.setString(1, project.getName());
-//        updateSt.setLong(2, project.getCompanyId());
-//        updateSt.setLong(3, project.getCustomerId());
-//        updateSt.setLong(4, project.getId());
-//        updateSt.executeUpdate();
-//    }
+    public void update(long oldProjectId, long oldDeveloperId, ProjectDeveloper projectDeveloper) throws SQLException {
+        updateSt.setLong(1, projectDeveloper.getProjectId());
+        updateSt.setLong(2, projectDeveloper.getDeveloperId());
+        updateSt.setLong(3, oldProjectId);
+        updateSt.setLong(4, oldDeveloperId);
+        updateSt.executeUpdate();
+    }
+
+    public void delete(ProjectDeveloper projectDeveloper) throws SQLException {
+        deleteSt.setLong(1, projectDeveloper.getProjectId());
+        deleteSt.setLong(2, projectDeveloper.getDeveloperId());
+        deleteSt.executeUpdate();
+    }
 }

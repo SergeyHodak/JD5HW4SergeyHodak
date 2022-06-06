@@ -1,36 +1,25 @@
-package tables.skills;
+package tables.skill;
 
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tables.skills.Skills;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class SkillsTests {
-    @Test
-    public void testToStringAndGetters() {
-        Skills skills = new Skills();
-        String result = "Skills{" +
-                "id=" + 0 +
-                ", department='" + null + '\'' +
-                ", skill_level='" + null + '\'' +
-                '}';
-        Assertions.assertEquals(result, skills.toString());
-    }
-
+class SkillTests {
     @Test
     public void testSetDepartment() {
         List<String> sets = new ArrayList<>();
         sets.add("T".repeat(10));
         sets.add("T".repeat(60));
+        sets.add(null);
 
         for (String set : sets) {
             try {
-                Skills skills = new Skills();
-                skills.setDepartment(set);
-                Assertions.assertEquals(set, skills.getDepartment());
+                Skill skill = new Skill();
+                skill.setDepartment(set);
+                Assertions.assertEquals(set, skill.getDepartment());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -38,16 +27,17 @@ class SkillsTests {
     }
 
     @Test
-    public void testSetSkill_level() {
+    public void testSetSkillLevel() {
         List<String> sets = new ArrayList<>();
         sets.add("T".repeat(10));
         sets.add("T".repeat(60));
+        sets.add(null);
 
         for (String set : sets) {
             try {
-                Skills skills = new Skills();
-                skills.setSkill_level(set);
-                Assertions.assertEquals(set, skills.getSkill_level());
+                Skill skill = new Skill();
+                skill.setSkillLevel(set);
+                Assertions.assertEquals(set, skill.getSkillLevel());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }

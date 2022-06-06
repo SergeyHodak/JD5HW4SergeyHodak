@@ -10,170 +10,140 @@ import tables.customer.Customer;
 import tables.customer.CustomerDaoService;
 import tables.developer.Developer;
 import tables.developer.DeveloperDaoService;
+import tables.developer_skill.DeveloperSkill;
+import tables.developer_skill.DeveloperSkillDaoService;
 import tables.project.Project;
 import tables.project.ProjectDaoService;
+import tables.project_developer.ProjectDeveloper;
+import tables.project_developer.ProjectDeveloperDaoService;
+import tables.skill.Skill;
+import tables.skill.SkillDaoService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
     public static void main(String[] args) throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
         new DatabaseInitService().initDb(new Prefs().getString("dbUrl"));
         Storage storage = Storage.getInstance();
 
-
         CompanyDaoService companyDaoService = new CompanyDaoService(storage.getConnection());
-        List<Company> companies = new ArrayList<>();
-
-        Company company1 = new Company();
-        company1.setName("Future Technology");
-        company1.setDescription("Approaching humanity to the near future");
-        companies.add(company1);
-
-        Company company2 = new Company();
-        company2.setName("Agro firm");
-        company2.setDescription("Intellectual provision of agricultural machinery");
-        companies.add(company2);
-
-        Company company3 = new Company();
-        company3.setName("Integrate and use");
-        company3.setDescription("Moving your business to the digital world");
-        companies.add(company3);
-
-        for (Company company : companies) {
-            companyDaoService.create(company);
-        }
-
         CustomerDaoService customerDaoService = new CustomerDaoService(storage.getConnection());
-        List<Customer> customers = new ArrayList<>();
-
-        Customer customer1 = new Customer();
-        customer1.setFirstName("Aller");
-        customer1.setSecondName("Han");
-        customer1.setAge(38);
-        customers.add(customer1);
-
-        Customer customer2 = new Customer();
-        customer2.setFirstName("Kevin");
-        customer2.setSecondName("Stoon");
-        customer2.setAge(34);
-        customers.add(customer2);
-
-        Customer customer3 = new Customer();
-        customer3.setFirstName("Liz");
-        customer3.setSecondName("Krabse");
-        customer3.setAge(40);
-        customers.add(customer3);
-
-        for (Customer customer : customers) {
-            customerDaoService.create(customer);
-        }
-
         ProjectDaoService projectDaoService = new ProjectDaoService(storage.getConnection());
-        List<Project>  projects = new ArrayList<>();
-
-        Project project1 = new Project();
-        project1.setName("Artificial intelligence for milling machine");
-        project1.setCompanyId(1);
-        project1.setCustomerId(2);
-        projects.add(project1);
-
-        Project project2 = new Project();
-        project2.setName("App for simple options");
-        project2.setCompanyId(3);
-        project2.setCustomerId(1);
-        projects.add(project2);
-
-        Project project3 = new Project();
-        project3.setName("Finding profitable ways to exchange currencies");
-        project3.setCompanyId(1);
-        project3.setCustomerId(1);
-        projects.add(project3);
-
-        for (Project project : projects) {
-            projectDaoService.create(project);
-        }
-
-
         DeveloperDaoService developerDaoService = new DeveloperDaoService(storage.getConnection());
-        List<Developer>  developers = new ArrayList<>();
+        ProjectDeveloperDaoService projectDeveloperDaoService = new ProjectDeveloperDaoService(storage.getConnection());
+        SkillDaoService skillDaoService = new SkillDaoService(storage.getConnection());
+        DeveloperSkillDaoService developerSkillDaoService = new DeveloperSkillDaoService(storage.getConnection());
 
-        Developer developer1 = new Developer();
-        developer1.setFirstName("Did");
-        developer1.setFirstName("Panas");
-        developer1.setAge(61);
-        developer1.setGender(Developer.Gender.male);
-        developers.add(developer1);
-
-        Developer developer2 = new Developer();
-        developer2.setFirstName("Fedir");
-        developer2.setFirstName("Tomson");
-        developer2.setAge(45);
-        developer2.setGender(Developer.Gender.male);
-        developers.add(developer2);
-
-        Developer developer3 = new Developer();
-        developer3.setFirstName("Olga");
-        developer3.setFirstName("Dzi");
-        developer3.setAge(50);
-        developer3.setGender(Developer.Gender.female);
-        developers.add(developer3);
-
-        Developer developer4 = new Developer();
-        developer4.setFirstName("Oleg");
-        developer4.setFirstName("Filli");
-        developer4.setAge(23);
-        developer4.setGender(Developer.Gender.male);
-        developers.add(developer4);
-
-        Developer developer5 = new Developer();
-        developer5.setFirstName("Nina");
-        developer5.setFirstName("Weendi");
-        developer5.setAge(24);
-        developer5.setGender(Developer.Gender.female);
-        developers.add(developer5);
-
-        for (Developer developer : developers) {
-            developerDaoService.create(developer);
-        }
-
-        System.out.println(companyDaoService.getAll());
-        System.out.println(customerDaoService.getAll());
-        System.out.println(projectDaoService.getAll());
-        System.out.println(developerDaoService.getAll());
+        //TODO deComment this, to populate the database with data.
+        //todo *start
+//        String[][] valuesForCreateCompanies = {
+//                {"Future Technology", "Approaching humanity to the near future"},
+//                {"Agro firm", "Intellectual provision of agricultural machinery"},
+//                {"Integrate and use", "Moving your business to the digital world"}
+//        };
+//
+//        for (String[] values : valuesForCreateCompanies) {
+//            companyDaoService.create(new Company() {{
+//                setName(values[0]);
+//                setDescription(values[1]);
+//            }});
+//        }
+//
+//        String[][] valuesForCreateCustomers = {
+//                {"Aller", "Han", "38"},
+//                {"Kevin", "Stoon", "34"},
+//                {"Liz", "Krabse", "40"}
+//        };
+//
+//        for (String[] values : valuesForCreateCustomers) {
+//            customerDaoService.create(new Customer() {{
+//                setFirstName(values[0]);
+//                setSecondName(values[1]);
+//                setAge(Integer.parseInt(values[2]));
+//            }});
+//        }
+//
+//        String[][] valuesForCreateProjects = {
+//                {"Artificial intelligence for milling machine", "1", "2"},
+//                {"App for simple options", "3", "1"},
+//                {"Finding profitable ways to exchange currencies", "1", "1"}
+//        };
+//
+//        for (String[] values : valuesForCreateProjects) {
+//            projectDaoService.create(new Project() {{
+//                setName(values[0]);
+//                setCompanyId(Long.parseLong(values[1]));
+//                setCustomerId(Long.parseLong(values[2]));
+//            }});
+//        }
+//
+//        String[][] valuesForCreateDevelopers = {
+//                {"Did", "Panas", "61", "male"},
+//                {"Fedir", "Tomson", "45", "male"},
+//                {"Olga", "Dzi", "50", "female"},
+//                {"Oleg", "Filli", "23", "male"},
+//                {"Nina", "Weendi", "24", "female"},
+//        };
+//
+//        for (String[] values : valuesForCreateDevelopers) {
+//            developerDaoService.create(new Developer() {{
+//                setFirstName(values[0]);
+//                setFirstName(values[1]);
+//                setAge(Integer.parseInt(values[2]));
+//                setGender(Gender.valueOf(values[3]));
+//            }});
+//        }
+//
+//        long[][] valueForCreateProjectDevelopers = {
+//                {1, 1},
+//                {1, 3},
+//                {1, 5},
+//                {2, 2},
+//                {2, 4},
+//                {2, 5},
+//                {3, 1},
+//                {3, 2}
+//        };
+//
+//        for (long[] values : valueForCreateProjectDevelopers) {
+//            projectDeveloperDaoService.create(new ProjectDeveloper() {{
+//                setProjectId(values[0]);
+//                setDeveloperId(values[1]);
+//            }});
+//        }
+//
+//        String[][] valuesForCreateSkills = {
+//                {"java", "junior"},
+//                {"java", "middle"},
+//                {"java", "senior"},
+//                {"python", "junior"},
+//                {"python", "middle"},
+//                {"python", "senior"}
+//        };
+//
+//        for (String[] values : valuesForCreateSkills) {
+//            skillDaoService.create(new Skill() {{
+//                setDepartment(values[0]);
+//                setSkillLevel(values[1]);
+//            }});
+//        }
+//
+//        long[][] valueForCreateDeveloperSkills = {
+//                {1, 3},
+//                {1, 6},
+//                {2, 3},
+//                {3, 2},
+//                {4, 4},
+//                {5, 4},
+//                {5, 1}
+//        };
+//
+//        for (long[] values : valueForCreateDeveloperSkills) {
+//            developerSkillDaoService.create(new DeveloperSkill() {{
+//                setDeveloperId(values[0]);
+//                setSkillId(values[1]);
+//            }});
+//        }
+        //todo *finish
     }
-//      INSERT INTO project_developer (project_id, developer_id) VALUES
-//      (1, 1),
-//      (1, 3),
-//      (1, 5),
-//      (2, 2),
-//      (2, 4),
-//      (2, 5),
-//      (3, 1),
-//      (3, 2);
-
-//    INSERT INTO skills (department, skill_level) VALUES
-//    ('java',  'junior'),
-//    ('java',  'middle'),
-//    ('java',  'senior'),
-//    ('python',  'junior'),
-//    ('python',  'middle'),
-//    ('python',  'senior');
-
-//    INSERT INTO developers_skills (developer_id, skill_id) VALUES
-//    (1, 3),
-//    (1, 6),
-//    (2, 3),
-//    (
-//      SELECT id
-//      FROM developer
-//      WHERE name_surname='Olga Dzi',
-//      SELECT id
-//      FROM skills
-//      WHERE department='java' and skill_level='middle'
-//    ),
-//    (4, 4),
-//    (5, 4),
-//    (5, 1);
 }

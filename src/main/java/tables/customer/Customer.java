@@ -29,7 +29,7 @@ public class Customer {
         if (limit >= firstName.length()) {
             this.firstName = firstName;
         } else {
-            throw new NumberOfCharactersExceedsTheLimit("name_surname", limit, firstName);
+            throw new NumberOfCharactersExceedsTheLimit("firstName", limit, firstName);
         }
     }
 
@@ -42,7 +42,7 @@ public class Customer {
         if (limit >= secondName.length()) {
             this.secondName = secondName;
         } else {
-            throw new NumberOfCharactersExceedsTheLimit("name_surname", limit, secondName);
+            throw new NumberOfCharactersExceedsTheLimit("secondName", limit, secondName);
         }
     }
 
