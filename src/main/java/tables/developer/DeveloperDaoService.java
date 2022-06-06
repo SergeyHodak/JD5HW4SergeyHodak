@@ -25,11 +25,11 @@ public class DeveloperDaoService {
         );
 
         createSt = connection.prepareStatement(
-                "INSERT INTO developer (first_name, second_name, age, gender) VALUES(?, ?, ?, ?)"
+                "INSERT INTO developer (first_name, second_name, age, gender, salary) VALUES(?, ?, ?, ?, ?)"
         );
 
         getByIdSt = connection.prepareStatement(
-                "SELECT first_name, second_name, age, gender FROM developer WHERE id = ?"
+                "SELECT first_name, second_name, age, gender, salary FROM developer WHERE id = ?"
         );
 
         clearSt = connection.prepareStatement(
@@ -37,11 +37,11 @@ public class DeveloperDaoService {
         );
 
         getAllSt = connection.prepareStatement(
-                "SELECT id, first_name, second_name, age, gender FROM developer"
+                "SELECT id, first_name, second_name, age, gender, salary FROM developer"
         );
 
         updateSt = connection.prepareStatement(
-                "UPDATE developer SET first_name = ?, second_name = ?, age = ?, gender = ? WHERE id = ?"
+                "UPDATE developer SET first_name = ?, second_name = ?, age = ?, gender = ?, salary = ? WHERE id = ?"
         );
 
         deleteByIdSt = connection.prepareStatement(
@@ -54,6 +54,7 @@ public class DeveloperDaoService {
         createSt.setString(2, developer.getSecondName());
         createSt.setInt(3, developer.getAge());
         createSt.setString(4, developer.getGender().name());
+        createSt.setDouble(5, developer.getSalary());
         createSt.executeUpdate();
         long id;
         try (ResultSet rs = selectMaxIdSt.executeQuery()) {
@@ -75,6 +76,7 @@ public class DeveloperDaoService {
             result.setSecondName(rs.getString("second_name"));
             result.setAge(rs.getInt("age"));
             result.setGender(Developer.Gender.valueOf(rs.getString("gender")));
+            result.setSalary(rs.getDouble("salary"));
             return result;
         } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
             throw new RuntimeException(e);
@@ -95,6 +97,7 @@ public class DeveloperDaoService {
                 developer.setSecondName(rs.getString("second_name"));
                 developer.setAge(rs.getInt("age"));
                 developer.setGender(Developer.Gender.valueOf(rs.getString("gender")));
+                developer.setSalary(rs.getDouble("salary"));
                 result.add(developer);
             }
             return result;
@@ -108,7 +111,8 @@ public class DeveloperDaoService {
         updateSt.setString(2, developer.getSecondName());
         updateSt.setInt(3, developer.getAge());
         updateSt.setString(4, developer.getGender().name());
-        updateSt.setLong(5, developer.getId());
+        updateSt.setDouble(5, developer.getSalary());
+        updateSt.setLong(6, developer.getId());
         updateSt.executeUpdate();
     }
 

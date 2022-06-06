@@ -36,114 +36,115 @@ public class App {
 
         //TODO deComment this, to populate the database with data.
         //todo *start
-//        String[][] valuesForCreateCompanies = {
-//                {"Future Technology", "Approaching humanity to the near future"},
-//                {"Agro firm", "Intellectual provision of agricultural machinery"},
-//                {"Integrate and use", "Moving your business to the digital world"}
-//        };
-//
-//        for (String[] values : valuesForCreateCompanies) {
-//            companyDaoService.create(new Company() {{
-//                setName(values[0]);
-//                setDescription(values[1]);
-//            }});
-//        }
-//
-//        String[][] valuesForCreateCustomers = {
-//                {"Aller", "Han", "38"},
-//                {"Kevin", "Stoon", "34"},
-//                {"Liz", "Krabse", "40"}
-//        };
-//
-//        for (String[] values : valuesForCreateCustomers) {
-//            customerDaoService.create(new Customer() {{
-//                setFirstName(values[0]);
-//                setSecondName(values[1]);
-//                setAge(Integer.parseInt(values[2]));
-//            }});
-//        }
-//
-//        String[][] valuesForCreateProjects = {
-//                {"Artificial intelligence for milling machine", "1", "2"},
-//                {"App for simple options", "3", "1"},
-//                {"Finding profitable ways to exchange currencies", "1", "1"}
-//        };
-//
-//        for (String[] values : valuesForCreateProjects) {
-//            projectDaoService.create(new Project() {{
-//                setName(values[0]);
-//                setCompanyId(Long.parseLong(values[1]));
-//                setCustomerId(Long.parseLong(values[2]));
-//            }});
-//        }
-//
-//        String[][] valuesForCreateDevelopers = {
-//                {"Did", "Panas", "61", "male"},
-//                {"Fedir", "Tomson", "45", "male"},
-//                {"Olga", "Dzi", "50", "female"},
-//                {"Oleg", "Filli", "23", "male"},
-//                {"Nina", "Weendi", "24", "female"},
-//        };
-//
-//        for (String[] values : valuesForCreateDevelopers) {
-//            developerDaoService.create(new Developer() {{
-//                setFirstName(values[0]);
-//                setFirstName(values[1]);
-//                setAge(Integer.parseInt(values[2]));
-//                setGender(Gender.valueOf(values[3]));
-//            }});
-//        }
-//
-//        long[][] valueForCreateProjectDevelopers = {
-//                {1, 1},
-//                {1, 3},
-//                {1, 5},
-//                {2, 2},
-//                {2, 4},
-//                {2, 5},
-//                {3, 1},
-//                {3, 2}
-//        };
-//
-//        for (long[] values : valueForCreateProjectDevelopers) {
-//            projectDeveloperDaoService.create(new ProjectDeveloper() {{
-//                setProjectId(values[0]);
-//                setDeveloperId(values[1]);
-//            }});
-//        }
-//
-//        String[][] valuesForCreateSkills = {
-//                {"java", "junior"},
-//                {"java", "middle"},
-//                {"java", "senior"},
-//                {"python", "junior"},
-//                {"python", "middle"},
-//                {"python", "senior"}
-//        };
-//
-//        for (String[] values : valuesForCreateSkills) {
-//            skillDaoService.create(new Skill() {{
-//                setDepartment(values[0]);
-//                setSkillLevel(values[1]);
-//            }});
-//        }
-//
-//        long[][] valueForCreateDeveloperSkills = {
-//                {1, 3},
-//                {1, 6},
-//                {2, 3},
-//                {3, 2},
-//                {4, 4},
-//                {5, 4},
-//                {5, 1}
-//        };
-//
-//        for (long[] values : valueForCreateDeveloperSkills) {
-//            developerSkillDaoService.create(new DeveloperSkill() {{
-//                setDeveloperId(values[0]);
-//                setSkillId(values[1]);
-//            }});
-//        }
+        String[][] valuesForCreateCompanies = {
+                {"Future Technology", "Approaching humanity to the near future"},
+                {"Agro firm", "Intellectual provision of agricultural machinery"},
+                {"Integrate and use", "Moving your business to the digital world"}
+        };
+
+        for (String[] values : valuesForCreateCompanies) {
+            companyDaoService.create(new Company() {{
+                setName(values[0]);
+                setDescription(values[1]);
+            }});
+        }
+
+        String[][] valuesForCreateCustomers = {
+                {"Aller", "Han", "38"},
+                {"Kevin", "Stoon", "34"},
+                {"Liz", "Krabse", "40"}
+        };
+
+        for (String[] values : valuesForCreateCustomers) {
+            customerDaoService.create(new Customer() {{
+                setFirstName(values[0]);
+                setSecondName(values[1]);
+                setAge(Integer.parseInt(values[2]));
+            }});
+        }
+
+        String[][] valuesForCreateProjects = {
+                {"Artificial intelligence for milling machine", "1", "2"},
+                {"App for simple options", "3", "1"},
+                {"Finding profitable ways to exchange currencies", "1", "1"}
+        };
+
+        for (String[] values : valuesForCreateProjects) {
+            projectDaoService.create(new Project() {{
+                setName(values[0]);
+                setCompanyId(Long.parseLong(values[1]));
+                setCustomerId(Long.parseLong(values[2]));
+            }});
+        }
+
+        String[][] valuesForCreateDevelopers = {
+                {"Did", "Panas", "61", "male", "7000"},
+                {"Fedir", "Tomson", "45", "male", "4000"},
+                {"Olga", "Dzi", "50", "female", "1000"},
+                {"Oleg", "Filli", "23", "male", "200"},
+                {"Nina", "Weendi", "24", "female", "500"},
+        };
+
+        for (String[] values : valuesForCreateDevelopers) {
+            developerDaoService.create(new Developer() {{
+                setFirstName(values[0]);
+                setSecondName(values[1]);
+                setAge(Integer.parseInt(values[2]));
+                setGender(Gender.valueOf(values[3]));
+                setSalary(Double.parseDouble(values[4]));
+            }});
+        }
+
+        long[][] valueForCreateProjectDevelopers = {
+                {1, 1},
+                {1, 3},
+                {1, 5},
+                {2, 2},
+                {2, 4},
+                {2, 5},
+                {3, 1},
+                {3, 2}
+        };
+
+        for (long[] values : valueForCreateProjectDevelopers) {
+            projectDeveloperDaoService.create(new ProjectDeveloper() {{
+                setProjectId(values[0]);
+                setDeveloperId(values[1]);
+            }});
+        }
+
+        String[][] valuesForCreateSkills = {
+                {"java", "junior"},
+                {"java", "middle"},
+                {"java", "senior"},
+                {"python", "junior"},
+                {"python", "middle"},
+                {"python", "senior"}
+        };
+
+        for (String[] values : valuesForCreateSkills) {
+            skillDaoService.create(new Skill() {{
+                setDepartment(values[0]);
+                setSkillLevel(values[1]);
+            }});
+        }
+
+        long[][] valueForCreateDeveloperSkills = {
+                {1, 3},
+                {1, 6},
+                {2, 3},
+                {3, 2},
+                {4, 4},
+                {5, 4},
+                {5, 1}
+        };
+
+        for (long[] values : valueForCreateDeveloperSkills) {
+            developerSkillDaoService.create(new DeveloperSkill() {{
+                setDeveloperId(values[0]);
+                setSkillId(values[1]);
+            }});
+        }
         //todo *finish
     }
 }

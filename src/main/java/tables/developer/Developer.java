@@ -22,6 +22,9 @@ public class Developer {
     @Setter
     @Getter
     private Gender gender;
+    @Setter
+    @Getter
+    private double salary;
 
     public enum Gender {
         male,

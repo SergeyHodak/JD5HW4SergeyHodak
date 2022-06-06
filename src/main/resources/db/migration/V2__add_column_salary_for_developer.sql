@@ -1,0 +1,1 @@
+ALTER TABLE developer ADD salary number;
