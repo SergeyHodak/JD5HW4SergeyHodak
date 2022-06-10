@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @ToString
 @EqualsAndHashCode
 public class Project {
@@ -19,6 +21,9 @@ public class Project {
     private long companyId;
     @Getter
     private long customerId;
+    @Setter
+    @Getter
+    private LocalDate creationDate;
 
     public void setName(String name) throws NumberOfCharactersExceedsTheLimit {
         int limit = 200;

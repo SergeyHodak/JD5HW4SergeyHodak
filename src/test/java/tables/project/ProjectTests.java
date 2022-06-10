@@ -5,24 +5,29 @@ import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 class ProjectTests {
     @Test
     public void testSetName() {
-        List<String> sets = new ArrayList<>();
-        sets.add("Test".repeat(20));
-        sets.add("Test".repeat(70));
-        sets.add(null);
+        String[] sets = {
+                "Test".repeat(20),
+                "Test".repeat(70),
+                null
+        };
 
         for (String set : sets) {
             try {
                 Project project = new Project();
                 project.setName(set);
                 Assertions.assertEquals(set, project.getName());
-            } catch (NumberOfCharactersExceedsTheLimit | NullPointerException thrown) {
+
+            } catch (NullPointerException thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
+            } catch (NumberOfCharactersExceedsTheLimit thrown) {
+                String result =
+                        "The value is too long for the field \"name\"."
+                                + " Limit = 200. You are transmitting = "
+                                + set.length() + " symbol.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
@@ -36,7 +41,8 @@ class ProjectTests {
                 project.setCompanyId(set);
                 Assertions.assertEquals(set, project.getCompanyId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                Assertions.assertEquals("The value passed for writing must be greater than zero.",
+                        thrown.getMessage());
             }
         }
     }
@@ -50,7 +56,8 @@ class ProjectTests {
                 project.setCustomerId(set);
                 Assertions.assertEquals(set, project.getCustomerId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                Assertions.assertEquals("The value passed for writing must be greater than zero.",
+                        thrown.getMessage());
             }
         }
     }

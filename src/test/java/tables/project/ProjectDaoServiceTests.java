@@ -17,6 +17,7 @@ import tables.customer.CustomerDaoService;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,10 +59,10 @@ class ProjectDaoServiceTests {
         }});
 
         String[][] valuesForCreated = {
-                {"TestName", "1", "1"},
-                {null, "1", "1"},
-                {"TestName1", "0", "1"},
-                {"TestName2", "1", "0"}
+                {"TestName", "1", "1", "2022-06-07"},
+                {null, "1", "1", "2022-06-07"},
+                {"TestName1", "0", "1", "2022-06-07"},
+                {"TestName2", "1", "0", "2022-06-07"}
         };
 
         for (String[] value : valuesForCreated) {
@@ -70,6 +71,7 @@ class ProjectDaoServiceTests {
                 project.setName(value[0]);
                 project.setCompanyId(Long.parseLong(value[1]));
                 project.setCustomerId(Long.parseLong(value[2]));
+                project.setCreationDate(LocalDate.parse(value[3]));
 
                 long id = daoService.create(project);
 
@@ -79,6 +81,7 @@ class ProjectDaoServiceTests {
                 Assertions.assertEquals(value[0], saved.getName());
                 Assertions.assertEquals(Long.parseLong(value[1]), saved.getCompanyId());
                 Assertions.assertEquals(Long.parseLong(value[2]), saved.getCustomerId());
+                Assertions.assertEquals(LocalDate.parse(value[3]), saved.getCreationDate());
             } catch (NumberOfCharactersExceedsTheLimit | MustNotBeNull | NullPointerException thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -102,6 +105,7 @@ class ProjectDaoServiceTests {
         expected.setName("TestName");
         expected.setCompanyId(1);
         expected.setCustomerId(1);
+        expected.setCreationDate(LocalDate.now());
 
         long id = daoService.create(expected);
         expected.setId(id);
@@ -143,17 +147,17 @@ class ProjectDaoServiceTests {
         original.setName("TestName");
         original.setCompanyId(1);
         original.setCustomerId(1);
+        original.setCreationDate(LocalDate.now());
 
         long id = daoService.create(original);
         original.setId(id);
 
-
         String[][] projects = {
-                {"TestUpdateName", "2", "2"},
-                {"TestUpdateName1", "0", "1"},
-                {"TestUpdateName2", "1", "0"},
-                {"TestUpdateName3", "1", "3"},
-                {null, "1", "1"}
+                {"TestUpdateName", "2", "2", "2022-06-07"},
+                {"TestUpdateName1", "0", "1", "2022-05-07"},
+                {"TestUpdateName2", "1", "0", "2022-04-07"},
+                {"TestUpdateName3", "1", "3", "2022-03-07"},
+                {null, "1", "1", "2022-02-07"}
         };
 
         for (String[] project : projects) {
@@ -163,6 +167,7 @@ class ProjectDaoServiceTests {
                     setName(project[0]);
                     setCompanyId(Long.parseLong(project[1]));
                     setCustomerId(Long.parseLong(project[2]));
+                    setCreationDate(LocalDate.parse(project[3]));
                 }});
 
                 Project saved = daoService.getById(id);
@@ -171,6 +176,7 @@ class ProjectDaoServiceTests {
                 Assertions.assertEquals(saved.getName(), project[0]);
                 Assertions.assertEquals(saved.getCompanyId(), Long.parseLong(project[1]));
                 Assertions.assertEquals(saved.getCustomerId(), Long.parseLong(project[2]));
+                Assertions.assertEquals(saved.getCreationDate(), LocalDate.parse(project[3]));
             } catch (SQLException | NumberOfCharactersExceedsTheLimit | MustNotBeNull | NullPointerException thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
@@ -194,6 +200,7 @@ class ProjectDaoServiceTests {
         expected.setName("TestName");
         expected.setCompanyId(1);
         expected.setCustomerId(1);
+        expected.setCreationDate(LocalDate.now());
 
         long id = daoService.create(expected);
         daoService.deleteById(id);

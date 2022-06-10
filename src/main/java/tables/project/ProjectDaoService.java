@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class ProjectDaoService {
         );
 
         createSt = connection.prepareStatement(
-                "INSERT INTO project (name, company_id, customer_id) VALUES(?, ?, ?)"
+                "INSERT INTO project (name, company_id, customer_id, creation_date) VALUES(?, ?, ?, ?)"
         );
 
         getByIdSt = connection.prepareStatement(
-                "SELECT name, company_id, customer_id FROM project WHERE id = ?"
+                "SELECT name, company_id, customer_id, creation_date FROM project WHERE id = ?"
         );
 
         clearSt = connection.prepareStatement(
@@ -37,11 +38,11 @@ public class ProjectDaoService {
         );
 
         getAllSt = connection.prepareStatement(
-                "SELECT id, name, company_id, customer_id FROM project"
+                "SELECT id, name, company_id, customer_id, creation_date FROM project"
         );
 
         updateSt = connection.prepareStatement(
-                "UPDATE project SET name = ?, company_id = ?, customer_id = ? WHERE id = ?"
+                "UPDATE project SET name = ?, company_id = ?, customer_id = ?, creation_date = ? WHERE id = ?"
         );
 
         deleteByIdSt = connection.prepareStatement(
@@ -53,6 +54,7 @@ public class ProjectDaoService {
         createSt.setString(1, project.getName());
         createSt.setLong(2, project.getCompanyId());
         createSt.setLong(3, project.getCustomerId());
+        createSt.setString(4, project.getCreationDate().toString());
         createSt.executeUpdate();
         long id;
         try (ResultSet rs = selectMaxIdSt.executeQuery()) {
@@ -73,6 +75,7 @@ public class ProjectDaoService {
             result.setName(rs.getString("name"));
             result.setCompanyId(rs.getLong("company_id"));
             result.setCustomerId(rs.getLong("customer_id"));
+            result.setCreationDate(LocalDate.parse(rs.getString("creation_date")));
             return result;
         } catch (NumberOfCharactersExceedsTheLimit | MustNotBeNull e) {
             throw new RuntimeException(e);
@@ -92,6 +95,7 @@ public class ProjectDaoService {
                 project.setName(rs.getString("name"));
                 project.setCompanyId(rs.getLong("company_id"));
                 project.setCustomerId(rs.getLong("customer_id"));
+                project.setCreationDate(LocalDate.parse(rs.getString("creation_date")));
                 result.add(project);
             }
             return result;
@@ -104,7 +108,8 @@ public class ProjectDaoService {
         updateSt.setString(1, project.getName());
         updateSt.setLong(2, project.getCompanyId());
         updateSt.setLong(3, project.getCustomerId());
-        updateSt.setLong(4, project.getId());
+        updateSt.setString(4, project.getCreationDate().toString());
+        updateSt.setLong(5, project.getId());
         updateSt.executeUpdate();
     }
 
