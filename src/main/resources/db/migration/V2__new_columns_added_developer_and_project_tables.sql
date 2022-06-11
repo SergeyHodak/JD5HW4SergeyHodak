@@ -1,4 +1,4 @@
-ALTER TABLE developer ADD salary number;
+ALTER TABLE developer ADD salary number CHECK(0 <= salary);
 
 ALTER TABLE project ADD cost number;
 

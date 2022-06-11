@@ -14,7 +14,8 @@ class ProjectDeveloperTests {
                 projectDeveloper.setProjectId(set);
                 Assertions.assertEquals(set, projectDeveloper.getProjectId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value passed for writing must be greater than zero.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
@@ -28,7 +29,8 @@ class ProjectDeveloperTests {
                 projectDeveloper.setDeveloperId(set);
                 Assertions.assertEquals(set, projectDeveloper.getDeveloperId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value passed for writing must be greater than zero.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }

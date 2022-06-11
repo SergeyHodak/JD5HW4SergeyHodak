@@ -9,16 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import prefs.Prefs;
 import storage.DatabaseInitService;
-import tables.company.Company;
-import tables.company.CompanyDaoService;
-import tables.customer.Customer;
-import tables.customer.CustomerDaoService;
 import tables.developer.Developer;
 import tables.developer.DeveloperDaoService;
-import tables.project.Project;
-import tables.project.ProjectDaoService;
-import tables.project_developer.ProjectDeveloper;
-import tables.project_developer.ProjectDeveloperDaoService;
 import tables.skill.Skill;
 import tables.skill.SkillDaoService;
 

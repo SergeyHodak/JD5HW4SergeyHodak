@@ -14,7 +14,8 @@ class DeveloperSkillTests {
                 developerSkill.setDeveloperId(set);
                 Assertions.assertEquals(set, developerSkill.getDeveloperId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value passed for writing must be greater than zero.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
@@ -28,7 +29,8 @@ class DeveloperSkillTests {
                 developerSkill.setSkillId(set);
                 Assertions.assertEquals(set, developerSkill.getSkillId());
             } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value passed for writing must be greater than zero.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }

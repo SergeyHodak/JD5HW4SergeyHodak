@@ -21,6 +21,7 @@ import tables.project.ProjectDaoService;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,6 +73,7 @@ class ProjectDeveloperDaoServiceTests {
             setName("TestName");
             setCompanyId(1);
             setCustomerId(1);
+            setCreationDate(LocalDate.now());
         }});
 
         developerDaoService.create(new Developer() {{
@@ -117,6 +119,7 @@ class ProjectDeveloperDaoServiceTests {
             setName("TestName");
             setCompanyId(1);
             setCustomerId(1);
+            setCreationDate(LocalDate.now());
         }});
 
         developerDaoService.create(new Developer() {{
@@ -151,9 +154,9 @@ class ProjectDeveloperDaoServiceTests {
         }});
 
         String[][] valuesForCreateProjects = {
-                {"TestName", "1", "1"},
-                {"TestName1", "1", "1"},
-                {"TestName2", "1", "1"}
+                {"TestName", "1", "1", "2022-06-07"},
+                {"TestName1", "1", "1", "2022-06-07"},
+                {"TestName2", "1", "1", "2022-06-07"}
         };
 
         for (String[] valuesForCreateProject : valuesForCreateProjects) {
@@ -161,6 +164,7 @@ class ProjectDeveloperDaoServiceTests {
                 setName(valuesForCreateProject[0]);
                 setCompanyId(Long.parseLong(valuesForCreateProject[1]));
                 setCustomerId(Long.parseLong(valuesForCreateProject[2]));
+                setCreationDate(LocalDate.parse(valuesForCreateProject[3]));
             }});
         }
 
@@ -220,9 +224,9 @@ class ProjectDeveloperDaoServiceTests {
         }});
 
         String[][] valuesForCreateProjects = {
-                {"TestName", "1", "1"},
-                {"TestName1", "1", "1"},
-                {"TestName2", "1", "1"}
+                {"TestName", "1", "1", "2022-06-07"},
+                {"TestName1", "1", "1", "2022-06-07"},
+                {"TestName2", "1", "1", "2022-06-07"}
         };
 
         for (String[] valuesForCreateProject : valuesForCreateProjects) {
@@ -230,6 +234,7 @@ class ProjectDeveloperDaoServiceTests {
                 setName(valuesForCreateProject[0]);
                 setCompanyId(Long.parseLong(valuesForCreateProject[1]));
                 setCustomerId(Long.parseLong(valuesForCreateProject[2]));
+                setCreationDate(LocalDate.parse(valuesForCreateProject[3]));
             }});
         }
 
@@ -289,9 +294,9 @@ class ProjectDeveloperDaoServiceTests {
         }});
 
         String[][] valuesForCreateProjects = {
-                {"TestName", "1", "1"},
-                {"TestName1", "1", "1"},
-                {"TestName2", "1", "1"}
+                {"TestName", "1", "1", "2022-06-07"},
+                {"TestName1", "1", "1", "2022-06-07"},
+                {"TestName2", "1", "1", "2022-06-07"}
         };
 
         for (String[] valuesForCreateProject : valuesForCreateProjects) {
@@ -299,6 +304,7 @@ class ProjectDeveloperDaoServiceTests {
                 setName(valuesForCreateProject[0]);
                 setCompanyId(Long.parseLong(valuesForCreateProject[1]));
                 setCustomerId(Long.parseLong(valuesForCreateProject[2]));
+                setCreationDate(LocalDate.parse(valuesForCreateProject[3]));
             }});
         }
 
@@ -376,6 +382,7 @@ class ProjectDeveloperDaoServiceTests {
             setName("TestName");
             setCompanyId(1);
             setCustomerId(1);
+            setCreationDate(LocalDate.now());
         }});
 
         developerDaoService.create(new Developer() {{

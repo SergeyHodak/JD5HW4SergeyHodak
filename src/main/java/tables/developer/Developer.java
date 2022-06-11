@@ -1,6 +1,7 @@
 package tables.developer;
 
 import exceptions.AgeOutOfRange;
+import exceptions.NotNegative;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,7 +23,6 @@ public class Developer {
     @Setter
     @Getter
     private Gender gender;
-    @Setter
     @Getter
     private double salary;
 
@@ -64,6 +64,14 @@ public class Developer {
             this.age = age;
         } else {
             throw new AgeOutOfRange("age", min, max, age);
+        }
+    }
+
+    public void setSalary(double salary) throws NotNegative {
+        if (salary >= 0) {
+            this.salary = salary;
+        } else {
+            throw new NotNegative();
         }
     }
 }

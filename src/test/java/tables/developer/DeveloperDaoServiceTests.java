@@ -1,6 +1,7 @@
 package tables.developer;
 
 import exceptions.AgeOutOfRange;
+import exceptions.NotNegative;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -65,14 +66,14 @@ class DeveloperDaoServiceTests {
                 Assertions.assertEquals(Integer.parseInt(newDeveloper[2]), saved.getAge());
                 Assertions.assertEquals(Developer.Gender.valueOf(newDeveloper[3]), saved.getGender());
                 Assertions.assertEquals(Double.parseDouble(newDeveloper[4]), saved.getSalary());
-            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit thrown) {
+            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit | NotNegative thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
         }
     }
 
     @Test
-    public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, NotNegative {
         Developer expected = new Developer();
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
@@ -131,7 +132,7 @@ class DeveloperDaoServiceTests {
                 Assertions.assertEquals(saved.getAge(), Integer.parseInt(valuesForUpdate[2]));
                 Assertions.assertEquals(saved.getGender(), Developer.Gender.valueOf(valuesForUpdate[3]));
                 Assertions.assertEquals(saved.getSalary(), Double.parseDouble(valuesForUpdate[4]));
-            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit thrown) {
+            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit | NotNegative thrown) {
                 Assertions.assertNotEquals("", thrown.getMessage());
             }
         }

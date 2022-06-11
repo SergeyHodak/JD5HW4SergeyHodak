@@ -1,6 +1,7 @@
 package tables.developer;
 
 import exceptions.AgeOutOfRange;
+import exceptions.NotNegative;
 import exceptions.NumberOfCharactersExceedsTheLimit;
 
 import java.sql.Connection;
@@ -78,7 +79,7 @@ public class DeveloperDaoService {
             result.setGender(Developer.Gender.valueOf(rs.getString("gender")));
             result.setSalary(rs.getDouble("salary"));
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
+        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange | NotNegative e) {
             throw new RuntimeException(e);
         }
     }
@@ -101,7 +102,7 @@ public class DeveloperDaoService {
                 result.add(developer);
             }
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
+        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange | NotNegative e) {
             throw new RuntimeException(e);
         }
     }

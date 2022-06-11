@@ -1,7 +1,6 @@
 package tables.developer_skill;
 
 import exceptions.MustNotBeNull;
-import tables.project_developer.ProjectDeveloper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

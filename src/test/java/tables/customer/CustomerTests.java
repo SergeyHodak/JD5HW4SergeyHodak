@@ -5,16 +5,14 @@ import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 class CustomerTests {
     @Test
     public void testSetFirst_name() {
-        List<String> sets = new ArrayList<>();
-        sets.add("Test".repeat(5));
-        sets.add("T".repeat(51));
-        sets.add(null);
+        String[] sets = {
+                "Test".repeat(5),
+                "T".repeat(51),
+                null
+        };
 
         for (String set : sets) {
             try {
@@ -22,17 +20,21 @@ class CustomerTests {
                 customer.setFirstName(set);
                 Assertions.assertEquals(set, customer.getFirstName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                assert set != null;
+                String result = "The value is too long for the field \"firstName\". " +
+                        "Limit = 50. You are transmitting = " + set.length() + " symbol.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
 
     @Test
     public void testSetSecond_name() {
-        List<String> sets = new ArrayList<>();
-        sets.add("Test".repeat(1));
-        sets.add("T".repeat(51));
-        sets.add(null);
+        String[] sets = {
+                "Test".repeat(1),
+                "T".repeat(51),
+                null
+        };
 
         for (String set : sets) {
             try {
@@ -40,7 +42,10 @@ class CustomerTests {
                 customer.setSecondName(set);
                 Assertions.assertEquals(set, customer.getSecondName());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                assert set != null;
+                String result = "The value is too long for the field \"secondName\". " +
+                        "Limit = 50. You are transmitting = " + set.length() + " symbol.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
@@ -54,8 +59,8 @@ class CustomerTests {
                 customer.setAge(set);
                 Assertions.assertEquals(set, customer.getAge());
             } catch (AgeOutOfRange thrown) {
-                System.out.println(1);
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The \"age\" field has a limitation. 0 <= age <= 150. You sent = " + set;
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }

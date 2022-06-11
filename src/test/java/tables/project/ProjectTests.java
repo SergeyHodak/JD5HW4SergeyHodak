@@ -11,7 +11,6 @@ class ProjectTests {
         String[] sets = {
                 "Test".repeat(20),
                 "Test".repeat(70),
-                null
         };
 
         for (String set : sets) {
@@ -19,9 +18,6 @@ class ProjectTests {
                 Project project = new Project();
                 project.setName(set);
                 Assertions.assertEquals(set, project.getName());
-
-            } catch (NullPointerException thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
                 String result =
                         "The value is too long for the field \"name\"."
