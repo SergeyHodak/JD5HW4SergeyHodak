@@ -21,7 +21,9 @@ class SkillTests {
                 skill.setDepartment(set);
                 Assertions.assertEquals(set, skill.getDepartment());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value is too long for the field \"department\". Limit = 50. " +
+                        "You are transmitting = " + set.length() + " symbol.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }
@@ -39,7 +41,9 @@ class SkillTests {
                 skill.setSkillLevel(set);
                 Assertions.assertEquals(set, skill.getSkillLevel());
             } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
+                String result = "The value is too long for the field \"skillLevel\". Limit = 50. " +
+                        "You are transmitting = " + set.length() + " symbol.";
+                Assertions.assertEquals(result, thrown.getMessage());
             }
         }
     }

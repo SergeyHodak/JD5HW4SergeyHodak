@@ -31,6 +31,8 @@ public class DeveloperState extends CliState {
     private final String getAll = "getAll";
     private final String update = "update";
     private final String deleteById = "deleteById";
+    private final String getDevelopersByDepartment = "getDevelopersByDepartment";
+    private final String getDevelopersBySkillLevel = "getDevelopersBySkillLevel";
 
     List<String> availableCmd = List.of(
             exit,
@@ -40,15 +42,17 @@ public class DeveloperState extends CliState {
             getById,
             getAll,
             update,
-            deleteById
+            deleteById,
+            getDevelopersByDepartment,
+            getDevelopersBySkillLevel
     );
 
     @Override
-    public void init() {
+    public void init() throws SQLException {
         developerInputLoop();
     }
 
-    private void developerInputLoop() {
+    private void developerInputLoop() throws SQLException {
         String command = "";
 
         boolean status = true;
@@ -103,6 +107,14 @@ public class DeveloperState extends CliState {
                 deleteById();
                 break;
             }
+            case getDevelopersByDepartment: {
+                getDevelopersByDepartment();
+                break;
+            }
+            case getDevelopersBySkillLevel: {
+                getDevelopersBySkillLevel();
+                break;
+            }
         }
     }
 
@@ -111,11 +123,11 @@ public class DeveloperState extends CliState {
     }
 
     @Override
-    public void idleState() {
+    public void idleState() throws SQLException {
         new CliFSM(storage);
     }
 
-    private void create() {
+    private void create() throws SQLException {
         Developer developer = new Developer();
 
         while (true) {
@@ -187,7 +199,7 @@ public class DeveloperState extends CliState {
         developerInputLoop();
     }
 
-    private void getById() {
+    private void getById() throws SQLException {
         int id;
 
         while (true) {
@@ -215,7 +227,7 @@ public class DeveloperState extends CliState {
         developerInputLoop();
     }
 
-    private void getAll() {
+    private void getAll() throws SQLException {
         try {
             List<Developer> all = new DeveloperDaoService(storage.getConnection()).getAll();
             System.out.println(all);
@@ -226,7 +238,7 @@ public class DeveloperState extends CliState {
         developerInputLoop();
     }
 
-    private void update() {
+    private void update() throws SQLException {
         Developer developer = new Developer();
 
         while (true) {
@@ -312,7 +324,7 @@ public class DeveloperState extends CliState {
         developerInputLoop();
     }
 
-    private void deleteById() {
+    private void deleteById() throws SQLException {
         int id;
 
         while (true) {
@@ -334,6 +346,40 @@ public class DeveloperState extends CliState {
             System.out.println("--developer record successfully deleted--");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+
+        developerInputLoop();
+    }
+
+    private void getDevelopersByDepartment() throws SQLException {
+        while (true) {
+            System.out.println("Home/Developer/GetDevelopersByDepartment. Enter department:");
+            try {
+                String department = scanner.nextLine();
+                List<Developer> developersByDepartment = new DeveloperDaoService(storage.getConnection())
+                        .getDevelopersByDepartment(department);
+                System.out.println(developersByDepartment);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        developerInputLoop();
+    }
+
+    private void getDevelopersBySkillLevel() throws SQLException {
+        while (true) {
+            System.out.println("Home/Developer/GetDevelopersBySkillLevel. Enter skillLevel:");
+            try {
+                String skillLevel = scanner.nextLine();
+                List<Developer> developersByDepartment = new DeveloperDaoService(storage.getConnection())
+                        .getDevelopersBySkillLevel(skillLevel);
+                System.out.println(developersByDepartment);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
 
         developerInputLoop();

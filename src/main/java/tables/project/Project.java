@@ -23,6 +23,9 @@ public class Project {
     private long customerId;
     @Setter
     @Getter
+    private double cost;
+    @Setter
+    @Getter
     private LocalDate creationDate;
 
     public void setName(String name) throws NumberOfCharactersExceedsTheLimit {

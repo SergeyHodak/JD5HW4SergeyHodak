@@ -42,11 +42,11 @@ public class CompanyState extends CliState {
     );
 
     @Override
-    public void init() {
+    public void init() throws SQLException {
         companyInputLoop();
     }
 
-    private void companyInputLoop() {
+    private void companyInputLoop() throws SQLException {
         String command = "";
 
         boolean status = true;
@@ -109,11 +109,11 @@ public class CompanyState extends CliState {
     }
 
     @Override
-    public void idleState() {
+    public void idleState() throws SQLException {
         new CliFSM(storage);
     }
 
-    private void create() {
+    private void create() throws SQLException {
         Company company = new Company();
 
         while (true) {
@@ -149,7 +149,7 @@ public class CompanyState extends CliState {
         companyInputLoop();
     }
 
-    private void getById() {
+    private void getById() throws SQLException {
         int id;
 
         while (true) {
@@ -177,7 +177,7 @@ public class CompanyState extends CliState {
         companyInputLoop();
     }
 
-    private void getAll() {
+    private void getAll() throws SQLException {
         try {
             List<Company> all = new CompanyDaoService(storage.getConnection()).getAll();
             System.out.println(all);
@@ -188,7 +188,7 @@ public class CompanyState extends CliState {
         companyInputLoop();
     }
 
-    private void update() {
+    private void update() throws SQLException {
         Company company = new Company();
 
         while (true) {
@@ -238,7 +238,7 @@ public class CompanyState extends CliState {
         companyInputLoop();
     }
 
-    private void deleteById() {
+    private void deleteById() throws SQLException {
         int id;
 
         while (true) {

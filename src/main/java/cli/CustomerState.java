@@ -43,11 +43,11 @@ public class CustomerState extends CliState {
     );
 
     @Override
-    public void init() {
+    public void init() throws SQLException {
         customerInputLoop();
     }
 
-    private void customerInputLoop() {
+    private void customerInputLoop() throws SQLException {
         String command = "";
 
         boolean status = true;
@@ -110,11 +110,11 @@ public class CustomerState extends CliState {
     }
 
     @Override
-    public void idleState() {
+    public void idleState() throws SQLException {
         new CliFSM(storage);
     }
 
-    private void create() {
+    private void create() throws SQLException {
         Customer customer = new Customer();
 
         while (true) {
@@ -164,7 +164,7 @@ public class CustomerState extends CliState {
         customerInputLoop();
     }
 
-    private void getById() {
+    private void getById() throws SQLException {
         int id;
 
         while (true) {
@@ -192,7 +192,7 @@ public class CustomerState extends CliState {
         customerInputLoop();
     }
 
-    private void getAll() {
+    private void getAll() throws SQLException {
         try {
             List<Customer> all = new CustomerDaoService(storage.getConnection()).getAll();
             System.out.println(all);
@@ -203,7 +203,7 @@ public class CustomerState extends CliState {
         customerInputLoop();
     }
 
-    private void update() {
+    private void update() throws SQLException {
         Customer customer = new Customer();
 
         while (true) {
@@ -266,7 +266,7 @@ public class CustomerState extends CliState {
         customerInputLoop();
     }
 
-    private void deleteById() {
+    private void deleteById() throws SQLException {
         int id;
 
         while (true) {

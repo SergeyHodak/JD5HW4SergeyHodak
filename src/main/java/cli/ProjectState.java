@@ -1,6 +1,7 @@
 package cli;
 
 import storage.Storage;
+import tables.developer.Developer;
 import tables.project.Project;
 import tables.project.ProjectDaoService;
 
@@ -29,6 +30,10 @@ public class ProjectState extends CliState {
     private final String getAll = "getAll";
     private final String update = "update";
     private final String deleteById = "deleteById";
+    private final String getCostById = "getCostById";
+    private final String updateCostById = "updateCostById";
+    private final String getDevelopersByProjectId = "getDevelopersByProjectId";
+    private final String getAllBySpecialFormat = "getAllBySpecialFormat";
 
     List<String> availableCmd = List.of(
             exit,
@@ -38,15 +43,19 @@ public class ProjectState extends CliState {
             getById,
             getAll,
             update,
-            deleteById
+            deleteById,
+            getCostById,
+            updateCostById,
+            getDevelopersByProjectId,
+            getAllBySpecialFormat
     );
 
     @Override
-    public void init() {
+    public void init() throws SQLException {
         projectInputLoop();
     }
 
-    private void projectInputLoop() {
+    private void projectInputLoop() throws SQLException {
         String command = "";
 
         boolean status = true;
@@ -101,6 +110,22 @@ public class ProjectState extends CliState {
                 deleteById();
                 break;
             }
+            case getCostById: {
+                getCostById();
+                break;
+            }
+            case updateCostById: {
+                updateCostById();
+                break;
+            }
+            case getDevelopersByProjectId: {
+                getDevelopersByProjectId();
+                break;
+            }
+            case getAllBySpecialFormat: {
+                getAllBySpecialFormat();
+                break;
+            }
         }
     }
 
@@ -109,11 +134,11 @@ public class ProjectState extends CliState {
     }
 
     @Override
-    public void idleState() {
+    public void idleState() throws SQLException {
         new CliFSM(storage);
     }
 
-    private void create() {
+    private void create() throws SQLException {
         Project project = new Project();
 
         while (true) {
@@ -172,7 +197,7 @@ public class ProjectState extends CliState {
         projectInputLoop();
     }
 
-    private void getById() {
+    private void getById() throws SQLException {
         int id;
 
         while (true) {
@@ -200,7 +225,7 @@ public class ProjectState extends CliState {
         projectInputLoop();
     }
 
-    private void getAll() {
+    private void getAll() throws SQLException {
         try {
             List<Project> all = new ProjectDaoService(storage.getConnection()).getAll();
             System.out.println(all);
@@ -211,7 +236,7 @@ public class ProjectState extends CliState {
         projectInputLoop();
     }
 
-    private void update() {
+    private void update() throws SQLException {
         Project project = new Project();
 
         while (true) {
@@ -284,7 +309,7 @@ public class ProjectState extends CliState {
         projectInputLoop();
     }
 
-    private void deleteById() {
+    private void deleteById() throws SQLException {
         int id;
 
         while (true) {
@@ -307,6 +332,95 @@ public class ProjectState extends CliState {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        projectInputLoop();
+    }
+
+    private void getCostById() throws SQLException {
+        int id;
+
+        while (true) {
+            System.out.println("Home/Project/GetCostById. Enter id:");
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+                if (id <= 0) {
+                    System.out.println("!!! enter id with a value greater than zero !!!");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("!!! error. enter an integer value !!!");
+            }
+        }
+
+        try {
+            double costById = new ProjectDaoService(storage.getConnection()).getCostById(id);
+            System.out.println(costById);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        projectInputLoop();
+    }
+
+    private void updateCostById() throws SQLException {
+        int id;
+
+        while (true) {
+            System.out.println("Home/Project/UpdateCostById. Enter id:");
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+                if (id <= 0) {
+                    System.out.println("!!! enter id with a value greater than zero !!!");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("!!! error. enter an integer value !!!");
+            }
+        }
+
+        try {
+            new ProjectDaoService(storage.getConnection()).updateCostById(id);
+            System.out.println("--project.cost update, completed successfully--");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        projectInputLoop();
+    }
+
+    private void getDevelopersByProjectId() throws SQLException {
+        int id;
+
+        while (true) {
+            System.out.println("Home/Project/GetDevelopersByProjectId. Enter id:");
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+                if (id <= 0) {
+                    System.out.println("!!! enter id with a value greater than zero !!!");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("!!! error. enter an integer value !!!");
+            }
+        }
+
+        try {
+            List<Developer> developersByProjectId = new ProjectDaoService(storage.getConnection()).getDevelopersByProjectId(id);
+            System.out.println(developersByProjectId);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        projectInputLoop();
+    }
+
+    private void getAllBySpecialFormat() throws SQLException {
+        List<ProjectDaoService.project> allBySpecialFormat = new ProjectDaoService(storage.getConnection())
+                .getAllBySpecialFormat();
+        System.out.println(allBySpecialFormat);
 
         projectInputLoop();
     }

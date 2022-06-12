@@ -46,11 +46,11 @@ public class DeveloperSkillState extends CliState {
     );
 
     @Override
-    public void init() {
+    public void init() throws SQLException {
         developerSkillInputLoop();
     }
 
-    private void developerSkillInputLoop() {
+    private void developerSkillInputLoop() throws SQLException {
         String command = "";
 
         boolean status = true;
@@ -121,11 +121,11 @@ public class DeveloperSkillState extends CliState {
     }
 
     @Override
-    public void idleState() {
+    public void idleState() throws SQLException {
         new CliFSM(storage);
     }
 
-    private void create() {
+    private void create() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
 
         while (true) {
@@ -167,7 +167,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void exist() {
+    private void exist() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
 
         while (true) {
@@ -210,7 +210,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void getAll() {
+    private void getAll() throws SQLException {
         try {
             List<DeveloperSkill> all = new DeveloperSkillDaoService(storage.getConnection()).getAll();
             System.out.println(all);
@@ -221,7 +221,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void getAllByDeveloperId() {
+    private void getAllByDeveloperId() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
 
         while (true) {
@@ -249,7 +249,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void getAllBySkillId() {
+    private void getAllBySkillId() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
 
         while (true) {
@@ -278,7 +278,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void update() {
+    private void update() throws SQLException {
         DeveloperSkill old = new DeveloperSkill();
 
         while (true) {
@@ -350,7 +350,7 @@ public class DeveloperSkillState extends CliState {
         developerSkillInputLoop();
     }
 
-    private void delete() {
+    private void delete() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
 
         while (true) {

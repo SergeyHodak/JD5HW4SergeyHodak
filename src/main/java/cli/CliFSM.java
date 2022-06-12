@@ -3,6 +3,7 @@ package cli;
 import lombok.Getter;
 import storage.Storage;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,14 +37,14 @@ public class CliFSM {
             developerSkill
     );
 
-    public CliFSM(Storage storage) {
+    public CliFSM(Storage storage) throws SQLException {
         this.storage = storage;
         state = new IdleState(this);
         scanner = new Scanner(System.in);
         startInputLoop();
     }
 
-    public void startInputLoop() {
+    public void startInputLoop() throws SQLException {
         String command = "";
 
         while (true) {
@@ -96,31 +97,31 @@ public class CliFSM {
         }
     }
 
-    public void company() {
+    public void company() throws SQLException {
         state.company();
     }
 
-    public void customer() {
+    public void customer() throws SQLException {
         state.customer();
     }
 
-    public void project() {
+    public void project() throws SQLException {
         state.project();
     }
 
-    public void developer() {
+    public void developer() throws SQLException {
         state.developer();
     }
 
-    public void projectDeveloper() {
+    public void projectDeveloper() throws SQLException {
         state.projectDeveloper();
     }
 
-    public void skill() {
+    public void skill() throws SQLException {
         state.skill();
     }
 
-    public void developerSkill() {
+    public void developerSkill() throws SQLException {
         state.developerSkill();
     }
 
@@ -128,7 +129,7 @@ public class CliFSM {
         state.unknownCommand(cmd);
     }
 
-    public void setState(CliState state) {
+    public void setState(CliState state) throws SQLException {
         this.state = state;
         state.init();
     }

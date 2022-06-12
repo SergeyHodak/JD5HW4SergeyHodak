@@ -19,6 +19,8 @@ public class DeveloperDaoService {
     private final PreparedStatement getAllSt;
     private final PreparedStatement updateSt;
     private final PreparedStatement deleteByIdSt;
+    private final PreparedStatement getDevelopersByDepartmentSt;
+    private final PreparedStatement getDevelopersBySkillLevelSt;
 
     public DeveloperDaoService(Connection connection) throws SQLException {
         selectMaxIdSt = connection.prepareStatement(
@@ -47,6 +49,23 @@ public class DeveloperDaoService {
 
         deleteByIdSt = connection.prepareStatement(
                 "DELETE FROM developer WHERE id = ?"
+        );
+
+        getDevelopersByDepartmentSt = connection.prepareStatement(
+                "SELECT T1.*\n" +
+                        "FROM developer AS T1\n" +
+                        "JOIN developer_skill AS T2 ON T1.id=T2.developer_id\n" +
+                        "JOIN skill AS T3 ON T2.skill_id=T3.id\n" +
+                        "GROUP BY T3.department, T1.id\n" +
+                        "HAVING T3.department = ?"
+        );
+        getDevelopersBySkillLevelSt = connection.prepareStatement(
+                "SELECT T1.*\n" +
+                        "FROM developer AS T1\n" +
+                        "JOIN developer_skill AS T2 ON T1.id=T2.developer_id\n" +
+                        "JOIN skill AS T3 ON T2.skill_id=T3.id\n" +
+                        "GROUP BY T3.skill_level , T1.id\n" +
+                        "HAVING T3.skill_level = ?"
         );
     }
 
@@ -89,7 +108,7 @@ public class DeveloperDaoService {
     }
 
     public List<Developer> getAll() throws SQLException {
-        try(ResultSet rs = getAllSt.executeQuery()) {
+        try (ResultSet rs = getAllSt.executeQuery()) {
             List<Developer> result = new ArrayList<>();
             while (rs.next()) {
                 Developer developer = new Developer();
@@ -120,5 +139,47 @@ public class DeveloperDaoService {
     public void deleteById(long id) throws SQLException {
         deleteByIdSt.setLong(1, id);
         deleteByIdSt.executeUpdate();
+    }
+
+    public List<Developer> getDevelopersByDepartment(String department) throws SQLException {
+        getDevelopersByDepartmentSt.setString(1, department);
+        try (ResultSet rs = getDevelopersByDepartmentSt.executeQuery()) {
+            List<Developer> result = new ArrayList<>();
+            while (rs.next()) {
+                Developer developer = new Developer() {{
+                    setId(rs.getLong("id"));
+                    setFirstName(rs.getString("first_name"));
+                    setSecondName(rs.getString("second_name"));
+                    setAge(rs.getInt("age"));
+                    setGender(Developer.Gender.valueOf(rs.getString("gender")));
+                    setSalary(rs.getDouble("salary"));
+                }};
+                result.add(developer);
+            }
+            return result;
+        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange | NotNegative e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Developer> getDevelopersBySkillLevel(String skillLevel) throws SQLException {
+        getDevelopersBySkillLevelSt.setString(1, skillLevel);
+        try (ResultSet rs = getDevelopersBySkillLevelSt.executeQuery()) {
+            List<Developer> result = new ArrayList<>();
+            while (rs.next()) {
+                Developer developer = new Developer() {{
+                    setId(rs.getLong("id"));
+                    setFirstName(rs.getString("first_name"));
+                    setSecondName(rs.getString("second_name"));
+                    setAge(rs.getInt("age"));
+                    setGender(Developer.Gender.valueOf(rs.getString("gender")));
+                    setSalary(rs.getDouble("salary"));
+                }};
+                result.add(developer);
+            }
+            return result;
+        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange | NotNegative e) {
+            throw new RuntimeException(e);
+        }
     }
 }
