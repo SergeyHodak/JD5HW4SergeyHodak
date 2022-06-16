@@ -1,8 +1,5 @@
 package tables.customer;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NumberOfCharactersExceedsTheLimit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,8 +71,6 @@ public class CustomerDaoService {
             result.setSecondName(rs.getString("second_name"));
             result.setAge(rs.getInt("age"));
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -84,7 +79,7 @@ public class CustomerDaoService {
     }
 
     public List<Customer> getAll() throws SQLException {
-        try(ResultSet rs = getAllSt.executeQuery()) {
+        try (ResultSet rs = getAllSt.executeQuery()) {
             List<Customer> result = new ArrayList<>();
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -95,8 +90,6 @@ public class CustomerDaoService {
                 result.add(customer);
             }
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange e) {
-            throw new RuntimeException(e);
         }
     }
 

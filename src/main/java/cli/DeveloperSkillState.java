@@ -1,6 +1,5 @@
 package cli;
 
-import exceptions.MustNotBeNull;
 import storage.Storage;
 import tables.developer_skill.DeveloperSkill;
 import tables.developer_skill.DeveloperSkillDaoService;
@@ -21,6 +20,7 @@ public class DeveloperSkillState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/DeveloperSkill";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -52,13 +52,11 @@ public class DeveloperSkillState extends CliState {
 
     private void developerSkillInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/DeveloperSkill. Enter command:");
-
+            System.out.println(navigation);
             command = scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -127,40 +125,13 @@ public class DeveloperSkillState extends CliState {
 
     private void create() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Create. Enter developerId:");
-            String developerId = scanner.nextLine();
-            try {
-                long id = Long.parseLong(developerId);
-                developerSkill.setDeveloperId(id);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Create. Enter skillId:");
-            String skillId = scanner.nextLine();
-            try {
-                long id = Long.parseLong(skillId);
-                developerSkill.setSkillId(id);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setDeveloperId(developerSkill, create, "DeveloperId");
+        setSkillId(developerSkill, create, "skillId");
 
         try {
             new DeveloperSkillDaoService(storage.getConnection()).create(developerSkill);
-            System.out.println("--new developerSkill creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new developerSkill creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -169,32 +140,8 @@ public class DeveloperSkillState extends CliState {
 
     private void exist() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Exist. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                developerSkill.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Exist. Enter skillId:");
-            try {
-                long skillId = Long.parseLong(scanner.nextLine());
-                developerSkill.setSkillId(skillId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setDeveloperId(developerSkill, exist, "DeveloperId");
+        setSkillId(developerSkill, exist, "skillId");
 
         try {
             boolean result = new DeveloperSkillDaoService(storage.getConnection()).exist(
@@ -203,7 +150,6 @@ public class DeveloperSkillState extends CliState {
             );
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -223,26 +169,13 @@ public class DeveloperSkillState extends CliState {
 
     private void getAllByDeveloperId() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/GetAllByDeveloperId. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                developerSkill.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setDeveloperId(developerSkill, getAllByDeveloperId, "DeveloperId");
 
         try {
             List<DeveloperSkill> result = new DeveloperSkillDaoService(storage.getConnection()).getAllByDeveloperId(
                     developerSkill.getDeveloperId());
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -251,19 +184,7 @@ public class DeveloperSkillState extends CliState {
 
     private void getAllBySkillId() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/GetAllBySkillId. Enter skillId:");
-            try {
-                long skillId = Long.parseLong(scanner.nextLine());
-                developerSkill.setSkillId(skillId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setSkillId(developerSkill, getAllBySkillId, "skillId");
 
         try {
             List<DeveloperSkill> result = new DeveloperSkillDaoService(storage.getConnection()).getAllBySkillId(
@@ -271,7 +192,6 @@ public class DeveloperSkillState extends CliState {
             );
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -280,70 +200,21 @@ public class DeveloperSkillState extends CliState {
 
     private void update() throws SQLException {
         DeveloperSkill old = new DeveloperSkill();
+        setDeveloperId(old, update, "oldDeveloperId");
+        setSkillId(old, update, "oldSkillId");
 
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Update. Enter oldDeveloperId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                old.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Update. Enter oldSkillId:");
-            try {
-                long skillId = Long.parseLong(scanner.nextLine());
-                old.setSkillId(skillId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        DeveloperSkill update = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Update. Enter DeveloperId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                update.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Update. Enter SkillId:");
-            try {
-                long skillId = Long.parseLong(scanner.nextLine());
-                update.setSkillId(skillId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        DeveloperSkill updates = new DeveloperSkill();
+        setDeveloperId(updates, update, "DeveloperId");
+        setSkillId(updates, update, "SkillId");
 
         try {
             new DeveloperSkillDaoService(storage.getConnection()).update(
                     old.getDeveloperId(),
                     old.getSkillId(),
-                    update
+                    updates
             );
-            System.out.println("--update completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -352,41 +223,44 @@ public class DeveloperSkillState extends CliState {
 
     private void delete() throws SQLException {
         DeveloperSkill developerSkill = new DeveloperSkill();
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Delete. Enter DeveloperId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                developerSkill.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/DeveloperSkill/Delete. Enter SkillId:");
-            try {
-                long skillId = Long.parseLong(scanner.nextLine());
-                developerSkill.setSkillId(skillId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setDeveloperId(developerSkill, delete, "DeveloperId");
+        setSkillId(developerSkill, delete, "SkillId");
 
         try {
             new DeveloperSkillDaoService(storage.getConnection()).delete(developerSkill);
-            System.out.println("--developerSkill record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
         developerSkillInputLoop();
+    }
+
+    private void setDeveloperId(DeveloperSkill developerSkill, String nameCmd, String whatWeEnter) {
+        String navigation = path + "/" + nameCmd + ". Enter " + whatWeEnter +":";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long developerId = Long.parseLong(scanner.nextLine());
+                developerSkill.setDeveloperId(developerId);
+                break;
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    private void setSkillId(DeveloperSkill developerSkill, String nameCmd, String whatWeEnter) {
+        String navigation = path + "/" + nameCmd + ". Enter " + whatWeEnter +":";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long SkillId = Long.parseLong(scanner.nextLine());
+                developerSkill.setSkillId(SkillId);
+                break;
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 }

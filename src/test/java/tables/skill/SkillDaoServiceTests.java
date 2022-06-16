@@ -1,6 +1,5 @@
 package tables.skill;
 
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,34 +33,21 @@ class SkillDaoServiceTests {
 
     @Test
     public void testCreate() throws SQLException {
-        String[][] valuesForNewSkills = {
-                {"java", "junior"},
-                {"java", null},
-                {null, "senior"},
-                {"T".repeat(51), "junior"},
-                {"python", "T".repeat(51)},
-        };
+        Skill expected = new Skill();
+        expected.setDepartment("java");
+        expected.setSkillLevel("junior");
 
-        for (String[] value : valuesForNewSkills) {
-            try {
-                long id = daoService.create(new Skill() {{
-                    setDepartment(value[0]);
-                    setSkillLevel(value[1]);
-                }});
+        long id = daoService.create(expected);
 
-                Skill saved = daoService.getById(id);
+        Skill actual = daoService.getById(id);
 
-                Assertions.assertEquals(id, saved.getId());
-                Assertions.assertEquals(value[0], saved.getDepartment());
-                Assertions.assertEquals(value[1], saved.getSkillLevel());
-            } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getDepartment(), actual.getDepartment());
+        Assertions.assertEquals(expected.getSkillLevel(), actual.getSkillLevel());
     }
 
     @Test
-    public void getAllTest() throws NumberOfCharactersExceedsTheLimit, SQLException {
+    public void getAllTest() throws SQLException {
         String[][] valuesForNewSkills = {
                 {"java", "junior"},
                 {"java", "middle"},
@@ -88,41 +74,28 @@ class SkillDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws NumberOfCharactersExceedsTheLimit, SQLException {
+    public void testUpdate() throws SQLException {
         Skill original = new Skill();
         original.setDepartment("java");
         original.setSkillLevel("junior");
 
         long id = daoService.create(original);
-        original.setId(id);
 
-        String[][] valuesForUpdates = {
-                {"java", "middle"},
-                {"java", null},
-                {null, "senior"},
-                {"T".repeat(51), "junior"},
-                {"python", "T".repeat(51)},
-        };
+        Skill expected = new Skill();
+        expected.setId(id);
+        expected.setDepartment("python");
+        expected.setSkillLevel("middle");
+        daoService.update(expected);
 
-        for (String[] skill : valuesForUpdates) {
-            try {
-                daoService.update(new Skill() {{
-                    setId(id);
-                    setDepartment(skill[0]);
-                    setSkillLevel(skill[1]);
-                }});
-                Skill saved = daoService.getById(id);
-                Assertions.assertEquals(saved.getId(), id);
-                Assertions.assertEquals(saved.getDepartment(), skill[0]);
-                Assertions.assertEquals(saved.getSkillLevel(), skill[1]);
-            } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Skill actual = daoService.getById(id);
+
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getDepartment(), actual.getDepartment());
+        Assertions.assertEquals(expected.getSkillLevel(), actual.getSkillLevel());
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit {
+    public void testDelete() throws SQLException {
         Skill expected = new Skill();
         expected.setDepartment("java");
         expected.setSkillLevel("junior");

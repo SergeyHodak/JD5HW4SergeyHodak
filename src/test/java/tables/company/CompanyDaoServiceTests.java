@@ -1,6 +1,5 @@
 package tables.company;
 
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,33 +33,20 @@ class CompanyDaoServiceTests {
 
     @Test
     public void testCreateNewCompany() throws SQLException {
-        String[][] valuesForNewCompanies = {
-                {"TestNameCompany", "TestDescriptionCompany"},
-                {null, "TestDescriptionCompany"},
-                {"TestNameCompany", null},
-                {"T".repeat(201), "New Description For Company2"},
-                {"New Name2", "T".repeat(201)}
-        };
+        Company expected = new Company();
+        expected.setName("TestNameCompany");
+        expected.setDescription("TestDescriptionCompany");
 
-        for (String[] company : valuesForNewCompanies) {
-            try {
-                long id = daoService.create(new Company() {{
-                    setName(company[0]);
-                    setDescription(company[1]);
-                }});
-                Company saved = daoService.getById(id);
+        long id = daoService.create(expected);
+        Company actual = daoService.getById(id);
 
-                Assertions.assertEquals(id, saved.getId());
-                Assertions.assertEquals(company[0], saved.getName());
-                Assertions.assertEquals(company[1], saved.getDescription());
-            } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getDescription(), actual.getDescription());
     }
 
     @Test
-    public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit {
+    public void getAllTest() throws SQLException {
         Company expected = new Company();
         expected.setName("TestNameCompany");
         expected.setDescription("TestDescriptionCompany");
@@ -75,7 +61,7 @@ class CompanyDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws SQLException, NumberOfCharactersExceedsTheLimit {
+    public void testUpdate() throws SQLException {
         Company original = new Company();
         original.setName("TestNameCompany");
         original.setDescription("TestDescriptionCompany");
@@ -83,33 +69,22 @@ class CompanyDaoServiceTests {
         long id = daoService.create(original);
         original.setId(id);
 
-        String[][] valuesForUpdates = {
-                {"New Name", "New Description For Company"},
-                {null, "New Description For Company1"},
-                {"New Name1", null},
-                {"T".repeat(201), "New Description For Company2"},
-                {"New Name2", "T".repeat(201)}
-        };
+        Company expected = new Company();
+        expected.setId(id);
+        expected.setName("New Name");
+        expected.setDescription("New Description For Company");
 
-        for (String[] company : valuesForUpdates) {
-            try {
-                daoService.update(new Company() {{
-                    setId(id);
-                    setName(company[0]);
-                    setDescription(company[1]);
-                }});
-                Company saved = daoService.getById(id);
-                Assertions.assertEquals(saved.getId(), id);
-                Assertions.assertEquals(saved.getName(), company[0]);
-                Assertions.assertEquals(saved.getDescription(), company[1]);
-            } catch (NumberOfCharactersExceedsTheLimit thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        daoService.update(expected);
+
+        Company actual = daoService.getById(id);
+
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getDescription(), actual.getDescription());
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit {
+    public void testDelete() throws SQLException {
         Company expected = new Company();
         expected.setName("TestName");
         expected.setDescription("TestDescriptionCompany");

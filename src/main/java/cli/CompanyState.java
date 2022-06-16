@@ -1,6 +1,5 @@
 package cli;
 
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import storage.Storage;
 import tables.company.Company;
 import tables.company.CompanyDaoService;
@@ -21,6 +20,7 @@ public class CompanyState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/Company";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -48,13 +48,11 @@ public class CompanyState extends CliState {
 
     private void companyInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/Company. Enter command:");
-
+            System.out.println(navigation);
             command =  scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -115,34 +113,13 @@ public class CompanyState extends CliState {
 
     private void create() throws SQLException {
         Company company = new Company();
-
-        while (true) {
-            System.out.println("Home/Company/Create. Enter name:");
-            String name =  scanner.nextLine();
-            try {
-                company.setName(name);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Company/Create. Enter description:");
-            String description =  scanner.nextLine();
-            try {
-                company.setDescription(description);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setName(company, create);
+        setDescription(company, create);
 
         try {
             new CompanyDaoService(storage.getConnection()).create(company);
-            System.out.println("--new company creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new company creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -150,27 +127,11 @@ public class CompanyState extends CliState {
     }
 
     private void getById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Company/GetById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Company(), getById).getId();
         try {
             Company byId = new CompanyDaoService(storage.getConnection()).getById(id);
             System.out.println(byId);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -190,47 +151,13 @@ public class CompanyState extends CliState {
 
     private void update() throws SQLException {
         Company company = new Company();
-
-        while (true) {
-            System.out.println("Home/Company/Update. Enter id:");
-            try {
-                int id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    company.setId(id);
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Company/Update. Enter name:");
-            String name =  scanner.nextLine();
-            try {
-                company.setName(name);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Company/Update. Enter description:");
-            String description =  scanner.nextLine();
-            try {
-                company.setDescription(description);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setId(company, update);
+        setName(company, update);
+        setDescription(company, update);
 
         try {
             new CompanyDaoService(storage.getConnection()).update(company);
-            System.out.println("--company update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -239,29 +166,57 @@ public class CompanyState extends CliState {
     }
 
     private void deleteById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Company/DeleteById. Enter id:");
-            try {
-                 id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Company(), update).getId();
         try {
             new CompanyDaoService(storage.getConnection()).deleteById(id);
-            System.out.println("--company record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         companyInputLoop();
+    }
+
+    private Company setId(Company company, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Id:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long id = Long.parseLong(scanner.nextLine());
+                company.setId(id);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return company;
+    }
+
+    private void setName(Company company, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Name:";
+        while (true) {
+            System.out.println(navigation);
+            String name =  scanner.nextLine();
+            try {
+                company.setName(name);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setDescription(Company company, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Description:";
+        while (true) {
+            System.out.println(navigation);
+            String description =  scanner.nextLine();
+            try {
+                company.setDescription(description);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package tables.customer;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,38 +33,23 @@ class CustomerDaoServiceTests {
 
     @Test
     public void testCreate() throws SQLException {
-        String[][] valuesForNewCustomers = {
-                {"TestFirstName", "TestSecondName", "19"},
-                {null, "TestSecondName1", "20"},
-                {"TestFirstName1", null, "21"},
-                {"TestFirstName2", "TestSecondName2", "0"},
-                {"T".repeat(51), "TestSecondName3", "24"},
-                {"TestFirstName3", "T".repeat(51), "25"},
-                {"TestFirstName4", "TestSecondName4", "151"},
-        };
+        Customer expected = new Customer();
+        expected.setFirstName("TestFirstName");
+        expected.setSecondName("TestSecondName");
+        expected.setAge(19);
 
-        for (String[] customer : valuesForNewCustomers) {
-            try {
-                long id = daoService.create(new Customer() {{
-                    setFirstName(customer[0]);
-                    setSecondName(customer[1]);
-                    setAge(Integer.parseInt(customer[2]));
-                }});
+        long id = daoService.create(expected);
 
-                Customer saved = daoService.getById(id);
+        Customer actual = daoService.getById(id);
 
-                Assertions.assertEquals(id, saved.getId());
-                Assertions.assertEquals(customer[0], saved.getFirstName());
-                Assertions.assertEquals(customer[1], saved.getSecondName());
-                Assertions.assertEquals(Integer.parseInt(customer[2]), saved.getAge());
-            } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assertions.assertEquals(expected.getSecondName(), actual.getSecondName());
+        Assertions.assertEquals(expected.getAge(), actual.getAge());
     }
 
     @Test
-    public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void getAllTest() throws SQLException {
         Customer expected = new Customer();
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
@@ -82,7 +65,7 @@ class CustomerDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void testUpdate() throws SQLException {
         Customer original = new Customer();
         original.setFirstName("TestFirstName");
         original.setSecondName("TestSecondName");
@@ -91,40 +74,24 @@ class CustomerDaoServiceTests {
         long id = daoService.create(original);
         original.setId(id);
 
-        String[][] valuesForUpdates = {
-                {"TestUpdateFirstName", "TestUpdateSecondName", "49"},
-                {null, "TestUpdateSecondName1", "34"},
-                {"TestUpdateFirstName1", null, "33"},
-                {"TestUpdateFirstName2", "TestUpdateSecondName2", "0"},
-                {"T".repeat(51), "TestUpdateSecondName3", "24"},
-                {"TestUpdateFirstName3", "T".repeat(51), "25"},
-                {"TestUpdateFirstName4", "TestUpdateSecondName4", "151"},
-        };
+        Customer expected = new Customer();
+        expected.setId(id);
+        expected.setFirstName("TestUpdateFirstName");
+        expected.setSecondName("TestUpdateSecondName");
+        expected.setAge(49);
 
-        for (String[] update : valuesForUpdates) {
-            try {
-                daoService.update(new Customer() {{
-                    setId(id);
-                    setFirstName(update[0]);
-                    setSecondName(update[1]);
-                    setAge(Integer.parseInt(update[2]));
-                }});
+        daoService.update(expected);
 
-                Customer saved = daoService.getById(id);
+        Customer actual = daoService.getById(id);
 
-                Assertions.assertEquals(saved.getId(), original.getId());
-                Assertions.assertEquals(saved.getFirstName(), update[0]);
-                Assertions.assertEquals(saved.getSecondName(), update[1]);
-                Assertions.assertEquals(saved.getAge(), Integer.parseInt(update[2]));
-            } catch (NumberOfCharactersExceedsTheLimit | AgeOutOfRange thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-
-        }
+        Assertions.assertEquals(actual.getId(), expected.getId());
+        Assertions.assertEquals(actual.getFirstName(), expected.getFirstName());
+        Assertions.assertEquals(actual.getSecondName(), expected.getSecondName());
+        Assertions.assertEquals(actual.getAge(), expected.getAge());
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void testDelete() throws SQLException {
         Customer expected = new Customer();
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");

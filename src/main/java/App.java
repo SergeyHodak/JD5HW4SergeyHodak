@@ -1,8 +1,4 @@
 import cli.CliFSM;
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NotNegative;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import prefs.Prefs;
 import storage.DatabaseInitService;
 import storage.Storage;
@@ -25,7 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class App {
-    public static void main(String[] args) throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull, NotNegative {
+    public static void main(String[] args) throws SQLException {
         new DatabaseInitService().initDb(new Prefs().getString("dbUrl"));
         Storage storage = Storage.getInstance();
 

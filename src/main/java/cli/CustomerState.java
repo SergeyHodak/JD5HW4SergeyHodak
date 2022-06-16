@@ -1,7 +1,5 @@
 package cli;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import storage.Storage;
 import tables.customer.Customer;
 import tables.customer.CustomerDaoService;
@@ -22,6 +20,7 @@ public class CustomerState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/Customer";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -49,13 +48,11 @@ public class CustomerState extends CliState {
 
     private void customerInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/Customer. Enter command:");
-
+            System.out.println(navigation);
             command =  scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -116,48 +113,14 @@ public class CustomerState extends CliState {
 
     private void create() throws SQLException {
         Customer customer = new Customer();
-
-        while (true) {
-            System.out.println("Home/Customer/Create. Enter firstName:");
-            String firstName =  scanner.nextLine();
-            try {
-                customer.setFirstName(firstName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Customer/Create. Enter secondName:");
-            String secondName =  scanner.nextLine();
-            try {
-                customer.setSecondName(secondName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Customer/Create. Enter age:");
-
-            try {
-                int age = Integer.parseInt(scanner.nextLine());
-                customer.setAge(age);
-                break;
-            } catch (AgeOutOfRange e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setFirstName(customer, create);
+        setSecondName(customer, create);
+        setAge(customer, create);
 
         try {
             new CustomerDaoService(storage.getConnection()).create(customer);
-            System.out.println("--new customer creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new customer creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -165,27 +128,11 @@ public class CustomerState extends CliState {
     }
 
     private void getById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Customer/GetById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Customer(), getById).getId();
         try {
             Customer byId = new CustomerDaoService(storage.getConnection()).getById(id);
             System.out.println(byId);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -205,60 +152,14 @@ public class CustomerState extends CliState {
 
     private void update() throws SQLException {
         Customer customer = new Customer();
-
-        while (true) {
-            System.out.println("Home/Customer/Update. Enter id:");
-            try {
-                int id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    customer.setId(id);
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Customer/Update. Enter firstName:");
-            String firstName =  scanner.nextLine();
-            try {
-                customer.setFirstName(firstName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Customer/Update. Enter secondName:");
-            String secondName =  scanner.nextLine();
-            try {
-                customer.setSecondName(secondName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Customer/Update. Enter age:");
-            try {
-                int age = Integer.parseInt(scanner.nextLine());
-                customer.setAge(age);
-                break;
-            } catch (AgeOutOfRange e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setId(customer, update);
+        setFirstName(customer, update);
+        setSecondName(customer, update);
+        setAge(customer, update);
 
         try {
             new CustomerDaoService(storage.getConnection()).update(customer);
-            System.out.println("--customer update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -267,29 +168,71 @@ public class CustomerState extends CliState {
     }
 
     private void deleteById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Customer/DeleteById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Customer(), deleteById).getId();
         try {
             new CustomerDaoService(storage.getConnection()).deleteById(id);
-            System.out.println("--customer record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         customerInputLoop();
+    }
+
+    public Customer setId(Customer customer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Id:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long id = Long.parseLong(scanner.nextLine());
+                customer.setId(id);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return customer;
+    }
+
+    private void setFirstName(Customer customer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter FirstName:";
+        while (true) {
+            System.out.println(navigation);
+            String firstName =  scanner.nextLine();
+            try {
+                customer.setFirstName(firstName);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setSecondName(Customer customer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter SecondName:";
+        while (true) {
+            System.out.println(navigation);
+            String secondName =  scanner.nextLine();
+            try {
+                customer.setSecondName(secondName);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setAge(Customer customer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Age:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                int age = Integer.parseInt(scanner.nextLine());
+                customer.setAge(age);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

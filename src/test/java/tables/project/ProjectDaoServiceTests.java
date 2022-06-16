@@ -1,9 +1,5 @@
 package tables.project;
 
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NotNegative;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +53,7 @@ class ProjectDaoServiceTests {
     }
 
     @Test
-    public void testCreate() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange {
+    public void testCreate() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -69,40 +65,27 @@ class ProjectDaoServiceTests {
             setAge(19);
         }});
 
-        String[][] valuesForCreated = {
-                {"TestName", "1", "1", "10000", "2022-06-07"},
-                {null, "1", "1", "10000", "2022-06-07"},
-                {"TestName1", "0", "1", "10000", "2022-06-07"},
-                {"TestName2", "1", "0", "10000", "2022-06-07"}
-        };
+        Project expected = new Project();
+        expected.setName("TestName");
+        expected.setCompanyId(1);
+        expected.setCustomerId(1);
+        expected.setCost(10_000);
+        expected.setCreationDate(LocalDate.now());
 
-        for (String[] value : valuesForCreated) {
-            try {
-                Project project = new Project();
-                project.setName(value[0]);
-                project.setCompanyId(Long.parseLong(value[1]));
-                project.setCustomerId(Long.parseLong(value[2]));
-                project.setCost(Double.parseDouble(value[3]));
-                project.setCreationDate(LocalDate.parse(value[4]));
+        long id = daoService.create(expected);
 
-                long id = daoService.create(project);
+        Project actual = daoService.getById(id);
 
-                Project saved = daoService.getById(id);
-
-                Assertions.assertEquals(id, saved.getId());
-                Assertions.assertEquals(value[0], saved.getName());
-                Assertions.assertEquals(Long.parseLong(value[1]), saved.getCompanyId());
-                Assertions.assertEquals(Long.parseLong(value[2]), saved.getCustomerId());
-                Assertions.assertEquals(Double.parseDouble(value[3]), saved.getCost());
-                Assertions.assertEquals(LocalDate.parse(value[4]), saved.getCreationDate());
-            } catch (NumberOfCharactersExceedsTheLimit | MustNotBeNull | NullPointerException thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getCompanyId(), actual.getCompanyId());
+        Assertions.assertEquals(expected.getCustomerId(), actual.getCustomerId());
+        Assertions.assertEquals(expected.getCost(), actual.getCost());
+        Assertions.assertEquals(expected.getCreationDate(), actual.getCreationDate());
     }
 
     @Test
-    public void getAllTest() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void getAllTest() throws SQLException {
         Company company = new Company();
         company.setName("TestNameCompany");
         company.setDescription("TestDescriptionCompany");
@@ -131,7 +114,7 @@ class ProjectDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void testUpdate() throws SQLException {
         String[][] companies = {
                 {"TestNameCompany", "TestDescriptionCompany"},
                 {"TestNameCompany2", "TestDescriptionCompany2"}
@@ -165,43 +148,28 @@ class ProjectDaoServiceTests {
         original.setCreationDate(LocalDate.now());
 
         long id = daoService.create(original);
-        original.setId(id);
 
-        String[][] projects = {
-                {"TestUpdateName", "2", "2", "11000", "2022-06-07"},
-                {"TestUpdateName1", "0", "1", "12000", "2022-05-07"},
-                {"TestUpdateName2", "1", "0", "13000", "2022-04-07"},
-                {"TestUpdateName3", "1", "3", "14000", "2022-03-07"},
-                {null, "1", "1", "15000", "2022-02-07"}
-        };
+        Project expected = new Project();
+        expected.setId(id);
+        expected.setName("TestUpdateName");
+        expected.setCompanyId(2);
+        expected.setCustomerId(2);
+        expected.setCost(11_000);
+        expected.setCreationDate(LocalDate.parse("2022-06-07"));
+        daoService.update(expected);
 
-        for (String[] project : projects) {
-            try {
-                daoService.update(new Project() {{
-                    setId(id);
-                    setName(project[0]);
-                    setCompanyId(Long.parseLong(project[1]));
-                    setCustomerId(Long.parseLong(project[2]));
-                    setCost(Double.parseDouble(project[3]));
-                    setCreationDate(LocalDate.parse(project[4]));
-                }});
+        Project actual = daoService.getById(id);
 
-                Project saved = daoService.getById(id);
-
-                Assertions.assertEquals(saved.getId(), original.getId());
-                Assertions.assertEquals(saved.getName(), project[0]);
-                Assertions.assertEquals(saved.getCompanyId(), Long.parseLong(project[1]));
-                Assertions.assertEquals(saved.getCustomerId(), Long.parseLong(project[2]));
-                Assertions.assertEquals(saved.getCost(), Double.parseDouble(project[3]));
-                Assertions.assertEquals(saved.getCreationDate(), LocalDate.parse(project[4]));
-            } catch (SQLException | NumberOfCharactersExceedsTheLimit | MustNotBeNull | NullPointerException thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getCompanyId(), actual.getCompanyId());
+        Assertions.assertEquals(expected.getCustomerId(), actual.getCustomerId());
+        Assertions.assertEquals(expected.getCost(), actual.getCost());
+        Assertions.assertEquals(expected.getCreationDate(), actual.getCreationDate());
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
+    public void testDelete() throws SQLException {
         Company company = new Company();
         company.setName("TestNameCompany");
         company.setDescription("TestDescriptionCompany");
@@ -227,7 +195,7 @@ class ProjectDaoServiceTests {
     }
 
     @Test
-    public void testGetCostById() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void testGetCostById() throws SQLException {
         Company company = new Company();
         company.setName("TestNameCompany");
         company.setDescription("TestDescriptionCompany");
@@ -253,7 +221,7 @@ class ProjectDaoServiceTests {
     }
 
     @Test
-    public void testUpdateCostById() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull, NotNegative {
+    public void testUpdateCostById() throws SQLException {
         Company company = new Company();
         company.setName("TestNameCompany");
         company.setDescription("TestDescriptionCompany");
@@ -311,7 +279,7 @@ class ProjectDaoServiceTests {
     }
 
     @Test
-    public void testGetAllBySpecialFormat() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull, NotNegative {
+    public void testGetAllBySpecialFormat() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");

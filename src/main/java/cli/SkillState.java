@@ -20,6 +20,7 @@ public class SkillState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/Skill";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -47,13 +48,11 @@ public class SkillState extends CliState {
 
     private void skillInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/Skill. Enter command:");
-
+            System.out.println(navigation);
             command = scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -114,34 +113,13 @@ public class SkillState extends CliState {
 
     private void create() throws SQLException {
         Skill skill = new Skill();
-
-        while (true) {
-            System.out.println("Home/Skill/Create. Enter department:");
-            String department = scanner.nextLine();
-            try {
-                skill.setDepartment(department);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Skill/Create. Enter skillLevel:");
-            try {
-                String skillLevel = scanner.nextLine();
-                skill.setSkillLevel(skillLevel);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setDepartment(skill, create);
+        setSkillLevel(skill, create);
 
         try {
             new SkillDaoService(storage.getConnection()).create(skill);
-            System.out.println("--new skill creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new skill creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -149,27 +127,11 @@ public class SkillState extends CliState {
     }
 
     private void getById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Skill/GetById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Skill(), getById).getId();
         try {
             Skill byId = new SkillDaoService(storage.getConnection()).getById(id);
             System.out.println(byId);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -189,47 +151,13 @@ public class SkillState extends CliState {
 
     private void update() throws SQLException {
         Skill skill = new Skill();
-
-        while (true) {
-            System.out.println("Home/Skill/Update. Enter id:");
-            try {
-                int id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    skill.setId(id);
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Skill/Update. Enter department:");
-            String department = scanner.nextLine();
-            try {
-                skill.setDepartment(department);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Skill/Update. Enter skillLevel:");
-            String skillLevel = scanner.nextLine();
-            try {
-                skill.setSkillLevel(skillLevel);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setId(skill, update);
+        setDepartment(skill, update);
+        setSkillLevel(skill, update);
 
         try {
             new SkillDaoService(storage.getConnection()).update(skill);
-            System.out.println("--skill update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -238,22 +166,7 @@ public class SkillState extends CliState {
     }
 
     private void deleteById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Skill/DeleteById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Skill(), deleteById).getId();
         try {
             new SkillDaoService(storage.getConnection()).deleteById(id);
             System.out.println("--skill record successfully deleted--");
@@ -262,5 +175,48 @@ public class SkillState extends CliState {
         }
 
         skillInputLoop();
+    }
+
+    private Skill setId(Skill skill, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Id:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long id = Long.parseLong(scanner.nextLine());
+                skill.setId(id);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return skill;
+    }
+
+    private void setDepartment(Skill skill, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Department:";
+        while (true) {
+            System.out.println(navigation);
+            String department = scanner.nextLine();
+            try {
+                skill.setDepartment(department);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setSkillLevel(Skill skill, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter SkillLevel:";
+        while (true) {
+            System.out.println(navigation);
+            String skillLevel = scanner.nextLine();
+            try {
+                skill.setSkillLevel(skillLevel);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

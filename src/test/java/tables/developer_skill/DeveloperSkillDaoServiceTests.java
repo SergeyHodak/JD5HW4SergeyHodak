@@ -1,8 +1,5 @@
 package tables.developer_skill;
 
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +45,7 @@ class DeveloperSkillDaoServiceTests {
     }
 
     @Test
-    public void testCreate() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void testCreate() throws SQLException {
         developerDaoService.create(new Developer() {{
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
@@ -61,27 +58,16 @@ class DeveloperSkillDaoServiceTests {
             setSkillLevel("junior");
         }});
 
-        int[][] valuesForCreate = {
-                {1, 1},
-                {1, 0},
-                {0, 1}
-        };
+        boolean result = daoService.create(new DeveloperSkill() {{
+            setDeveloperId(1);
+            setSkillId(1);
+        }});
 
-        for (int[] create : valuesForCreate) {
-            try {
-                boolean result = daoService.create(new DeveloperSkill() {{
-                    setDeveloperId(create[0]);
-                    setSkillId(create[1]);
-                }});
-                Assertions.assertTrue(result);
-            } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertTrue(result);
     }
 
     @Test
-    public void getAllTest() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+    public void getAllTest() throws SQLException {
         developerDaoService.create(new Developer() {{
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
@@ -106,7 +92,7 @@ class DeveloperSkillDaoServiceTests {
     }
 
     @Test
-    public void testGetAllByProjectId() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+    public void testGetAllByProjectId() throws SQLException {
         String[][] valuesForCreateDevelopers = {
                 {"TestFirstName", "TestSecondName", "28", "male"},
                 {"TestFirstName1", "TestSecondName1", "29", "female"},
@@ -136,7 +122,12 @@ class DeveloperSkillDaoServiceTests {
         }
 
         long[][] valuesForCreateDependencies = {
-                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+                {1, 2},
+                {1, 3},
+                {2, 1},
+                {2, 3},
+                {3, 1},
+                {3, 2}
         };
 
         List<DeveloperSkill> expectedDevelopersSkills = new ArrayList<>();
@@ -163,7 +154,7 @@ class DeveloperSkillDaoServiceTests {
     }
 
     @Test
-    public void testGetAllBySkillId() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+    public void testGetAllBySkillId() throws SQLException {
         String[][] valuesForCreateDevelopers = {
                 {"TestFirstName", "TestSecondName", "28", "male"},
                 {"TestFirstName1", "TestSecondName1", "29", "female"},
@@ -193,7 +184,12 @@ class DeveloperSkillDaoServiceTests {
         }
 
         long[][] valuesForCreateDependencies = {
-                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+                {1, 2},
+                {1, 3},
+                {2, 1},
+                {2, 3},
+                {3, 1},
+                {3, 2}
         };
 
         List<DeveloperSkill> expectedDevelopersSkills = new ArrayList<>();
@@ -220,7 +216,7 @@ class DeveloperSkillDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+    public void testUpdate() throws SQLException {
         String[][] valuesForCreateDevelopers = {
                 {"TestFirstName", "TestSecondName", "28", "male"},
                 {"TestFirstName1", "TestSecondName1", "29", "female"},
@@ -262,37 +258,31 @@ class DeveloperSkillDaoServiceTests {
                 {3, 1},
                 {3, 2},
                 {2, 2},
-                {3, 3},
-                {0, 1},
-                {1, 0}
+                {3, 3}
         };
 
         long oldProjectId = original.getDeveloperId();
         long oldDeveloperId = original.getSkillId();
 
         for (long[] valuesForUpdate : valuesForUpdates) {
-            try {
-                DeveloperSkill test = new DeveloperSkill();
-                test.setDeveloperId(valuesForUpdate[0]);
-                test.setSkillId(valuesForUpdate[1]);
+            DeveloperSkill test = new DeveloperSkill();
+            test.setDeveloperId(valuesForUpdate[0]);
+            test.setSkillId(valuesForUpdate[1]);
 
-                daoService.update(
-                        oldProjectId, oldDeveloperId,
-                        test
-                );
+            daoService.update(
+                    oldProjectId, oldDeveloperId,
+                    test
+            );
 
-                Assertions.assertTrue(daoService.exist(valuesForUpdate[0], valuesForUpdate[1]));
+            Assertions.assertTrue(daoService.exist(valuesForUpdate[0], valuesForUpdate[1]));
 
-                oldProjectId = valuesForUpdate[0];
-                oldDeveloperId = valuesForUpdate[1];
-            } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
+            oldProjectId = valuesForUpdate[0];
+            oldDeveloperId = valuesForUpdate[1];
         }
     }
 
     @Test
-    public void testDelete() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException, MustNotBeNull {
+    public void testDelete() throws SQLException {
         developerDaoService.create(new Developer() {{
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");

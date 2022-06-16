@@ -1,7 +1,5 @@
 package tables.project_developer;
 
-import exceptions.MustNotBeNull;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -63,7 +61,7 @@ public class ProjectDeveloperDaoService {
     public boolean exist(long projectId, long developerId) throws SQLException {
         existEntrySt.setLong(1, projectId);
         existEntrySt.setLong(2, developerId);
-        try(ResultSet rs = existEntrySt.executeQuery()) {
+        try (ResultSet rs = existEntrySt.executeQuery()) {
             rs.next();
             return rs.getBoolean("result");
         }
@@ -74,7 +72,7 @@ public class ProjectDeveloperDaoService {
     }
 
     public List<ProjectDeveloper> getAll() throws SQLException {
-        try(ResultSet rs = getAllSt.executeQuery()) {
+        try (ResultSet rs = getAllSt.executeQuery()) {
             List<ProjectDeveloper> result = new ArrayList<>();
             while (rs.next()) {
                 ProjectDeveloper projectDeveloper = new ProjectDeveloper();
@@ -83,14 +81,12 @@ public class ProjectDeveloperDaoService {
                 result.add(projectDeveloper);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
     public List<ProjectDeveloper> getAllByProjectId(long projectId) throws SQLException {
         getAllByProjectIdSt.setLong(1, projectId);
-        try(ResultSet rs = getAllByProjectIdSt.executeQuery()) {
+        try (ResultSet rs = getAllByProjectIdSt.executeQuery()) {
             List<ProjectDeveloper> result = new ArrayList<>();
             while (rs.next()) {
                 ProjectDeveloper projectDeveloper = new ProjectDeveloper();
@@ -99,14 +95,12 @@ public class ProjectDeveloperDaoService {
                 result.add(projectDeveloper);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
     public List<ProjectDeveloper> getAllByDeveloperId(long developerId) throws SQLException {
         getAllByDeveloperIdSt.setLong(1, developerId);
-        try(ResultSet rs = getAllByDeveloperIdSt.executeQuery()) {
+        try (ResultSet rs = getAllByDeveloperIdSt.executeQuery()) {
             List<ProjectDeveloper> result = new ArrayList<>();
             while (rs.next()) {
                 ProjectDeveloper projectDeveloper = new ProjectDeveloper();
@@ -115,8 +109,6 @@ public class ProjectDeveloperDaoService {
                 result.add(projectDeveloper);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 

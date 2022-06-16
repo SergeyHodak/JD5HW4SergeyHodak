@@ -1,7 +1,5 @@
 package tables.developer_skill;
 
-import exceptions.MustNotBeNull;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,14 +65,14 @@ public class DeveloperSkillDaoService {
     public boolean exist(long developer_id, long skill_id) throws SQLException {
         existEntrySt.setLong(1, developer_id);
         existEntrySt.setLong(2, skill_id);
-        try(ResultSet rs = existEntrySt.executeQuery()) {
+        try (ResultSet rs = existEntrySt.executeQuery()) {
             rs.next();
             return rs.getBoolean("result");
         }
     }
 
     public List<DeveloperSkill> getAll() throws SQLException {
-        try(ResultSet rs = getAllSt.executeQuery()) {
+        try (ResultSet rs = getAllSt.executeQuery()) {
             List<DeveloperSkill> result = new ArrayList<>();
             while (rs.next()) {
                 DeveloperSkill developerSkill = new DeveloperSkill();
@@ -83,14 +81,12 @@ public class DeveloperSkillDaoService {
                 result.add(developerSkill);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
     public List<DeveloperSkill> getAllByDeveloperId(long developerId) throws SQLException {
         getAllByDeveloperIdSt.setLong(1, developerId);
-        try(ResultSet rs = getAllByDeveloperIdSt.executeQuery()) {
+        try (ResultSet rs = getAllByDeveloperIdSt.executeQuery()) {
             List<DeveloperSkill> result = new ArrayList<>();
             while (rs.next()) {
                 DeveloperSkill developerSkill = new DeveloperSkill();
@@ -99,14 +95,12 @@ public class DeveloperSkillDaoService {
                 result.add(developerSkill);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
     public List<DeveloperSkill> getAllBySkillId(long skillId) throws SQLException {
         getAllBySkillIdSt.setLong(1, skillId);
-        try(ResultSet rs = getAllBySkillIdSt.executeQuery()) {
+        try (ResultSet rs = getAllBySkillIdSt.executeQuery()) {
             List<DeveloperSkill> result = new ArrayList<>();
             while (rs.next()) {
                 DeveloperSkill developerSkill = new DeveloperSkill();
@@ -115,8 +109,6 @@ public class DeveloperSkillDaoService {
                 result.add(developerSkill);
             }
             return result;
-        } catch (MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 

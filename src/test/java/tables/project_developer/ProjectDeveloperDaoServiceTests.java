@@ -1,8 +1,5 @@
 package tables.project_developer;
 
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +54,7 @@ class ProjectDeveloperDaoServiceTests {
     }
 
     @Test
-    public void testCreate() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
+    public void testCreate() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -83,27 +80,16 @@ class ProjectDeveloperDaoServiceTests {
             setGender(Developer.Gender.male);
         }});
 
-        int[][] valuesForCreate = {
-                {1, 1},
-                {1, 0},
-                {0, 1}
-        };
+        boolean result = daoService.create(new ProjectDeveloper() {{
+            setProjectId(1);
+            setDeveloperId(1);
+        }});
 
-        for (int[] create : valuesForCreate) {
-            try {
-                boolean result = daoService.create(new ProjectDeveloper() {{
-                    setProjectId(create[0]);
-                    setDeveloperId(create[1]);
-                }});
-                Assertions.assertTrue(result);
-            } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertTrue(result);
     }
 
     @Test
-    public void getAllTest() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void getAllTest() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -141,7 +127,7 @@ class ProjectDeveloperDaoServiceTests {
     }
 
     @Test
-    public void testGetAllByProjectId() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void testGetAllByProjectId() throws SQLException{
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -184,7 +170,12 @@ class ProjectDeveloperDaoServiceTests {
         }
 
         long[][] valuesForCreateDependencies = {
-                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+                {1, 2},
+                {1, 3},
+                {2, 1},
+                {2, 3},
+                {3, 1},
+                {3, 2}
         };
 
         List<ProjectDeveloper> expectedProjectsDevelopers = new ArrayList<>();
@@ -211,7 +202,7 @@ class ProjectDeveloperDaoServiceTests {
     }
 
     @Test
-    public void testGetAllByDeveloperId() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void testGetAllByDeveloperId() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -254,7 +245,12 @@ class ProjectDeveloperDaoServiceTests {
         }
 
         long[][] valuesForCreateDependencies = {
-                {1, 2}, {1, 3}, {2, 1}, {2, 3}, {3, 1}, {3, 2}
+                {1, 2},
+                {1, 3},
+                {2, 1},
+                {2, 3},
+                {3, 1},
+                {3, 2}
         };
 
         List<ProjectDeveloper> expectedProjectsDevelopers = new ArrayList<>();
@@ -281,7 +277,7 @@ class ProjectDeveloperDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws NumberOfCharactersExceedsTheLimit, SQLException, AgeOutOfRange, MustNotBeNull {
+    public void testUpdate() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");
@@ -336,37 +332,31 @@ class ProjectDeveloperDaoServiceTests {
                 {3, 1},
                 {3, 2},
                 {2, 2},
-                {3, 3},
-                {0, 1},
-                {1, 0}
+                {3, 3}
         };
 
         long oldProjectId = original.getProjectId();
         long oldDeveloperId = original.getDeveloperId();
 
         for (long[] valuesForUpdate : valuesForUpdates) {
-            try {
-                ProjectDeveloper test = new ProjectDeveloper();
-                test.setProjectId(valuesForUpdate[0]);
-                test.setDeveloperId(valuesForUpdate[1]);
+            ProjectDeveloper test = new ProjectDeveloper();
+            test.setProjectId(valuesForUpdate[0]);
+            test.setDeveloperId(valuesForUpdate[1]);
 
-                daoService.update(
-                        oldProjectId, oldDeveloperId,
-                        test
-                );
+            daoService.update(
+                    oldProjectId, oldDeveloperId,
+                    test
+            );
 
-                Assertions.assertTrue(daoService.exist(valuesForUpdate[0], valuesForUpdate[1]));
+            Assertions.assertTrue(daoService.exist(valuesForUpdate[0], valuesForUpdate[1]));
 
-                oldProjectId = valuesForUpdate[0];
-                oldDeveloperId = valuesForUpdate[1];
-            } catch (MustNotBeNull thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
+            oldProjectId = valuesForUpdate[0];
+            oldDeveloperId = valuesForUpdate[1];
         }
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, MustNotBeNull {
+    public void testDelete() throws SQLException {
         companyDaoService.create(new Company() {{
             setName("TestNameCompany");
             setDescription("TestDescriptionCompany");

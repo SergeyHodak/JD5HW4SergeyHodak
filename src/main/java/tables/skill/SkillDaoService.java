@@ -1,7 +1,5 @@
 package tables.skill;
 
-import exceptions.NumberOfCharactersExceedsTheLimit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,8 +69,6 @@ public class SkillDaoService {
             result.setDepartment(rs.getString("department"));
             result.setSkillLevel(rs.getString("skill_level"));
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -91,8 +87,6 @@ public class SkillDaoService {
                 result.add(skill);
             }
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit e) {
-            throw new RuntimeException(e);
         }
     }
 

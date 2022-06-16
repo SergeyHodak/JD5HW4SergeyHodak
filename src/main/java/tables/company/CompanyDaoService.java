@@ -1,7 +1,5 @@
 package tables.company;
 
-import exceptions.NumberOfCharactersExceedsTheLimit;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,8 +69,6 @@ public class CompanyDaoService {
             result.setName(rs.getString("name"));
             result.setDescription(rs.getString("description"));
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -91,8 +87,6 @@ public class CompanyDaoService {
                 result.add(company);
             }
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit e) {
-            throw new RuntimeException(e);
         }
     }
 

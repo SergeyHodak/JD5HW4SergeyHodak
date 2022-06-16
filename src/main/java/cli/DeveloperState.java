@@ -1,7 +1,5 @@
 package cli;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import storage.Storage;
 import tables.developer.Developer;
 import tables.developer.DeveloperDaoService;
@@ -23,6 +21,7 @@ public class DeveloperState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/Developer";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -54,13 +53,11 @@ public class DeveloperState extends CliState {
 
     private void developerInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/Developer. Enter command:");
-
+            System.out.println(navigation);
             command =  scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -129,70 +126,16 @@ public class DeveloperState extends CliState {
 
     private void create() throws SQLException {
         Developer developer = new Developer();
-
-        while (true) {
-            System.out.println("Home/Developer/Create. Enter firstName:");
-            String firstName =  scanner.nextLine();
-            try {
-                developer.setFirstName(firstName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Create. Enter secondName:");
-            String secondName =  scanner.nextLine();
-            try {
-                developer.setSecondName(secondName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Create. Enter age:");
-            try {
-                int age = Integer.parseInt(scanner.nextLine());
-                developer.setAge(age);
-                break;
-            } catch (AgeOutOfRange e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Create. Enter gender:");
-            try {
-                Developer.Gender gender = Developer.Gender.valueOf(scanner.nextLine());
-                developer.setGender(gender);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println("enter one of " + Arrays.toString(Developer.Gender.values()));
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Create. Enter salary:");
-            try {
-                double salary = Double.parseDouble(scanner.nextLine());
-                developer.setSalary(salary);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setFirstName(developer, create);
+        setSecondName(developer, create);
+        setAge(developer, create);
+        setGender(developer, create);
+        setSalary(developer, create);
 
         try {
             new DeveloperDaoService(storage.getConnection()).create(developer);
-            System.out.println("--new developer creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new developer creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -200,27 +143,11 @@ public class DeveloperState extends CliState {
     }
 
     private void getById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Developer/GetById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Developer(), getById).getId();
         try {
             Developer byId = new DeveloperDaoService(storage.getConnection()).getById(id);
             System.out.println(byId);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -240,83 +167,16 @@ public class DeveloperState extends CliState {
 
     private void update() throws SQLException {
         Developer developer = new Developer();
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter id:");
-            try {
-                int id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    developer.setId(id);
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter firstName:");
-            String firstName =  scanner.nextLine();
-            try {
-                developer.setFirstName(firstName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter secondName:");
-            String secondName =  scanner.nextLine();
-            try {
-                developer.setSecondName(secondName);
-                break;
-            } catch (NumberOfCharactersExceedsTheLimit e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter age:");
-            try {
-                int age = Integer.parseInt(scanner.nextLine());
-                developer.setAge(age);
-                break;
-            } catch (AgeOutOfRange e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter gender:");
-            try {
-                Developer.Gender gender = Developer.Gender.valueOf(scanner.nextLine());
-                developer.setGender(gender);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println("enter one of " + Arrays.toString(Developer.Gender.values()));
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Developer/Update. Enter salary:");
-            try {
-                double salary = Double.parseDouble(scanner.nextLine());
-                developer.setSalary(salary);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        setId(developer, update);
+        setFirstName(developer, update);
+        setSecondName(developer, update);
+        setAge(developer, update);
+        setGender(developer, update);
+        setSalary(developer, update);
 
         try {
             new DeveloperDaoService(storage.getConnection()).update(developer);
-            System.out.println("--developer update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -325,25 +185,10 @@ public class DeveloperState extends CliState {
     }
 
     private void deleteById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Developer/DeleteById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Developer(), deleteById).getId();
         try {
             new DeveloperDaoService(storage.getConnection()).deleteById(id);
-            System.out.println("--developer record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -352,8 +197,9 @@ public class DeveloperState extends CliState {
     }
 
     private void getDevelopersByDepartment() throws SQLException {
+        String navigation = path + "/" + getDevelopersByDepartment + ". Enter Department:";
         while (true) {
-            System.out.println("Home/Developer/GetDevelopersByDepartment. Enter department:");
+            System.out.println(navigation);
             try {
                 String department = scanner.nextLine();
                 List<Developer> developersByDepartment = new DeveloperDaoService(storage.getConnection())
@@ -369,8 +215,10 @@ public class DeveloperState extends CliState {
     }
 
     private void getDevelopersBySkillLevel() throws SQLException {
+        String navigation = path + "/" + getDevelopersBySkillLevel + ". Enter SkillLevel:";
+
         while (true) {
-            System.out.println("Home/Developer/GetDevelopersBySkillLevel. Enter skillLevel:");
+            System.out.println(navigation);
             try {
                 String skillLevel = scanner.nextLine();
                 List<Developer> developersByDepartment = new DeveloperDaoService(storage.getConnection())
@@ -383,5 +231,91 @@ public class DeveloperState extends CliState {
         }
 
         developerInputLoop();
+    }
+
+    private Developer setId(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Id:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long id = Long.parseLong(scanner.nextLine());
+                developer.setId(id);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return developer;
+    }
+
+    private void setFirstName(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter FirstName:";
+        while (true) {
+            System.out.println(navigation);
+            String firstName =  scanner.nextLine();
+            try {
+                developer.setFirstName(firstName);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setSecondName(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter SecondName:";
+        while (true) {
+            System.out.println(navigation);
+            String secondName =  scanner.nextLine();
+            try {
+                developer.setSecondName(secondName);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setAge(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Age:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                int age = Integer.parseInt(scanner.nextLine());
+                developer.setAge(age);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setGender(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Gender:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                Developer.Gender gender = Developer.Gender.valueOf(scanner.nextLine());
+                developer.setGender(gender);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("Enter one of " + Arrays.toString(Developer.Gender.values()));
+            }
+        }
+    }
+
+    private void setSalary(Developer developer, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Salary:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                double salary = Double.parseDouble(scanner.nextLine());
+                developer.setSalary(salary);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

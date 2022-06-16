@@ -1,77 +1,18 @@
 package tables.developer;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NotNegative;
-import exceptions.NumberOfCharactersExceedsTheLimit;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@ToString
-@EqualsAndHashCode
+@Data
 public class Developer {
-    @Setter
-    @Getter
     private long id;
-    @Getter
     private String firstName;
-    @Getter
     private String secondName;
-    @Getter
     private int age;
-    @Setter
-    @Getter
     private Gender gender;
-    @Getter
     private double salary;
 
     public enum Gender {
         male,
         female
-    }
-
-    public void setFirstName(String firstName) throws NumberOfCharactersExceedsTheLimit {
-        if (firstName == null) {
-            this.firstName = null;
-            return;
-        }
-        int limit = 50;
-        if(limit >= firstName.length()) {
-            this.firstName = firstName;
-        } else {
-            throw new NumberOfCharactersExceedsTheLimit("firstName", limit, firstName);
-        }
-    }
-
-    public void setSecondName(String secondName) throws NumberOfCharactersExceedsTheLimit {
-        if (secondName == null) {
-            this.secondName = null;
-            return;
-        }
-        int limit = 50;
-        if(limit >= secondName.length()) {
-            this.secondName = secondName;
-        } else {
-            throw new NumberOfCharactersExceedsTheLimit("secondName", limit, secondName);
-        }
-    }
-
-    public void setAge(int age) throws AgeOutOfRange {
-        int min = 0;
-        int max = 150;
-        if (min <= age & age <= max) {
-            this.age = age;
-        } else {
-            throw new AgeOutOfRange("age", min, max, age);
-        }
-    }
-
-    public void setSalary(double salary) throws NotNegative {
-        if (salary >= 0) {
-            this.salary = salary;
-        } else {
-            throw new NotNegative();
-        }
     }
 }

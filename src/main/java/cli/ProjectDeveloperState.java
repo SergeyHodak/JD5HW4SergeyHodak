@@ -1,6 +1,5 @@
 package cli;
 
-import exceptions.MustNotBeNull;
 import storage.Storage;
 import tables.project_developer.ProjectDeveloper;
 import tables.project_developer.ProjectDeveloperDaoService;
@@ -21,6 +20,7 @@ public class ProjectDeveloperState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/ProjectDeveloper";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -52,13 +52,11 @@ public class ProjectDeveloperState extends CliState {
 
     private void projectDeveloperInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/ProjectDeveloper. Enter command:");
-
+            System.out.println(navigation);
             command = scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -127,40 +125,13 @@ public class ProjectDeveloperState extends CliState {
 
     private void create() throws SQLException {
         ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Create. Enter projectId:");
-            String developerId = scanner.nextLine();
-            try {
-                long id = Long.parseLong(developerId);
-                projectDeveloper.setProjectId(id);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Create. Enter developerId:");
-            String skillId = scanner.nextLine();
-            try {
-                long id = Long.parseLong(skillId);
-                projectDeveloper.setDeveloperId(id);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setProjectId(projectDeveloper, create, "projectId");
+        setDeveloperId(projectDeveloper, create, "developerId");
 
         try {
             new ProjectDeveloperDaoService(storage.getConnection()).create(projectDeveloper);
-            System.out.println("--new projectDeveloper creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new projectDeveloper creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -169,32 +140,8 @@ public class ProjectDeveloperState extends CliState {
 
     private void exist() throws SQLException {
         ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Exist. Enter projectId:");
-            try {
-                long projectId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setProjectId(projectId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Exist. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setProjectId(projectDeveloper, exist, "projectId");
+        setDeveloperId(projectDeveloper, exist, "developerId");
 
         try {
             boolean result = new ProjectDeveloperDaoService(storage.getConnection()).exist(
@@ -203,7 +150,6 @@ public class ProjectDeveloperState extends CliState {
             );
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -223,26 +169,13 @@ public class ProjectDeveloperState extends CliState {
 
     private void getAllByProjectId() throws SQLException {
         ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/getAllByProjectId. Enter projectId:");
-            try {
-                long projectId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setProjectId(projectId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setProjectId(projectDeveloper, getAllByProjectId, "projectId");
 
         try {
             List<ProjectDeveloper> result = new ProjectDeveloperDaoService(storage.getConnection()).getAllByProjectId(
                     projectDeveloper.getProjectId());
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -251,19 +184,7 @@ public class ProjectDeveloperState extends CliState {
 
     private void getAllByDeveloperId() throws SQLException {
         ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/GetAllByDeveloperId. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setDeveloperId(projectDeveloper, getAllByDeveloperId, "developerId");
 
         try {
             List<ProjectDeveloper> result = new ProjectDeveloperDaoService(storage.getConnection()).getAllByDeveloperId(
@@ -271,7 +192,6 @@ public class ProjectDeveloperState extends CliState {
             );
             System.out.println(result);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -280,70 +200,21 @@ public class ProjectDeveloperState extends CliState {
 
     private void update() throws SQLException {
         ProjectDeveloper old = new ProjectDeveloper();
+        setProjectId(old, update, "oldProjectId");
+        setDeveloperId(old, update, "oldDeveloperId");
 
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Update. Enter oldProjectId:");
-            try {
-                long projectId = Long.parseLong(scanner.nextLine());
-                old.setProjectId(projectId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Update. Enter oldDeveloperId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                old.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        ProjectDeveloper update = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Update. Enter projectId:");
-            try {
-                long projectId = Long.parseLong(scanner.nextLine());
-                update.setProjectId(projectId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Update. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                update.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        ProjectDeveloper updates = new ProjectDeveloper();
+        setProjectId(updates, update, "projectId");
+        setDeveloperId(updates, update, "developerId");
 
         try {
             new ProjectDeveloperDaoService(storage.getConnection()).update(
                     old.getProjectId(),
                     old.getDeveloperId(),
-                    update
+                    updates
             );
-            System.out.println("--update completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -352,41 +223,44 @@ public class ProjectDeveloperState extends CliState {
 
     private void delete() throws SQLException {
         ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Delete. Enter projectId:");
-            try {
-                long projectId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setProjectId(projectId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/ProjectDeveloper/Delete. Enter developerId:");
-            try {
-                long developerId = Long.parseLong(scanner.nextLine());
-                projectDeveloper.setDeveloperId(developerId);
-                break;
-            } catch (MustNotBeNull e) {
-                System.out.println(e.getMessage());
-            } catch (Exception ex) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
+        setProjectId(projectDeveloper, delete, "projectId");
+        setDeveloperId(projectDeveloper, delete, "developerId");
 
         try {
             new ProjectDeveloperDaoService(storage.getConnection()).delete(projectDeveloper);
-            System.out.println("--projectDeveloper record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
         projectDeveloperInputLoop();
+    }
+
+    private void setProjectId(ProjectDeveloper projectDeveloper, String nameCmd, String whatWeEnter) {
+        String navigation = path + "/" + nameCmd + ". Enter " + whatWeEnter +":";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long projectId = Long.parseLong(scanner.nextLine());
+                projectDeveloper.setProjectId(projectId);
+                break;
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    private void setDeveloperId(ProjectDeveloper projectDeveloper, String nameCmd, String whatWeEnter) {
+        String navigation = path + "/" + nameCmd + ". Enter " + whatWeEnter +":";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long developerId = Long.parseLong(scanner.nextLine());
+                projectDeveloper.setDeveloperId(developerId);
+                break;
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
     }
 }

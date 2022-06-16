@@ -22,6 +22,7 @@ public class ProjectState extends CliState {
         storage = fsm.getStorage();
     }
 
+    private final String path = "Home/Project";
     private final String exit = "exit";
     private final String show = "show";
     private final String back = "back";
@@ -57,13 +58,11 @@ public class ProjectState extends CliState {
 
     private void projectInputLoop() throws SQLException {
         String command = "";
-
         boolean status = true;
+        String navigation = path + ". Enter command:";
         while (status) {
-            System.out.println("Home/Project. Enter command:");
-
+            System.out.println(navigation);
             command = scanner.nextLine();
-
             if (availableCmd.contains(command)) {
                 switch (command) {
                     case exit: {
@@ -140,57 +139,15 @@ public class ProjectState extends CliState {
 
     private void create() throws SQLException {
         Project project = new Project();
-
-        while (true) {
-            System.out.println("Home/Project/Create. Enter name:");
-            String name = scanner.nextLine();
-            try {
-                project.setName(name);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Create. Enter companyId:");
-            try {
-                long companyId = Long.parseLong(scanner.nextLine());
-                project.setCompanyId(companyId);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Create. Enter customerId:");
-            try {
-                long customerId = Integer.parseInt(scanner.nextLine());
-                project.setCustomerId(customerId);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Create. Enter creationDate:");
-            try {
-                LocalDate creationDate = LocalDate.parse(scanner.nextLine());
-                project.setCreationDate(creationDate);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println("date format = year-month-day. For example: 2022-06-07");
-            }
-        }
+        setName(project, create);
+        setCompanyId(project, create);
+        setCustomerId(project, create);
+        setCreationDate(project, create);
 
         try {
             new ProjectDaoService(storage.getConnection()).create(project);
-            System.out.println("--new project creation completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
-            System.out.println("!!! new project creation completed with following ERROR from database:");
             System.out.println(e.getMessage());
         }
 
@@ -198,27 +155,11 @@ public class ProjectState extends CliState {
     }
 
     private void getById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Project/GetById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Project(), getById).getId();
         try {
             Project byId = new ProjectDaoService(storage.getConnection()).getById(id);
             System.out.println(byId);
         } catch (SQLException e) {
-            System.out.println("!!! action completed with following error from database:");
             System.out.println(e.getMessage());
         }
 
@@ -238,70 +179,15 @@ public class ProjectState extends CliState {
 
     private void update() throws SQLException {
         Project project = new Project();
-
-        while (true) {
-            System.out.println("Home/Project/Update. Enter id:");
-            try {
-                int id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    project.setId(id);
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Update. Enter name:");
-            String name = scanner.nextLine();
-            try {
-                project.setName(name);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Update. Enter companyId:");
-            long companyId = Long.parseLong(scanner.nextLine());
-            try {
-                project.setCompanyId(companyId);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Update. Enter customerId:");
-            try {
-                long customerId = Long.parseLong(scanner.nextLine());
-                project.setCustomerId(customerId);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while (true) {
-            System.out.println("Home/Project/Update. Enter creationDate:");
-            try {
-                LocalDate creationDate = LocalDate.parse(scanner.nextLine());
-                project.setCreationDate(creationDate);
-                break;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println("date format = year-month-day. For example: 2022-06-07");
-            }
-        }
+        setId(project, update);
+        setName(project, update);
+        setCompanyId(project, update);
+        setCustomerId(project, update);
+        setCreationDate(project, update);
 
         try {
             new ProjectDaoService(storage.getConnection()).update(project);
-            System.out.println("--project update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -310,25 +196,10 @@ public class ProjectState extends CliState {
     }
 
     private void deleteById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Project/DeleteById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Project(), deleteById).getId();
         try {
             new ProjectDaoService(storage.getConnection()).deleteById(id);
-            System.out.println("--project record successfully deleted--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -337,22 +208,7 @@ public class ProjectState extends CliState {
     }
 
     private void getCostById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Project/GetCostById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Project(), getCostById).getId();
         try {
             double costById = new ProjectDaoService(storage.getConnection()).getCostById(id);
             System.out.println(costById);
@@ -364,25 +220,10 @@ public class ProjectState extends CliState {
     }
 
     private void updateCostById() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Project/UpdateCostById. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Project(), updateCostById).getId();
         try {
             new ProjectDaoService(storage.getConnection()).updateCostById(id);
-            System.out.println("--project.cost update, completed successfully--");
+            System.out.println(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -391,22 +232,7 @@ public class ProjectState extends CliState {
     }
 
     private void getDevelopersByProjectId() throws SQLException {
-        int id;
-
-        while (true) {
-            System.out.println("Home/Project/GetDevelopersByProjectId. Enter id:");
-            try {
-                id = Integer.parseInt(scanner.nextLine());
-                if (id <= 0) {
-                    System.out.println("!!! enter id with a value greater than zero !!!");
-                } else {
-                    break;
-                }
-            } catch (Exception e) {
-                System.out.println("!!! error. enter an integer value !!!");
-            }
-        }
-
+        long id = setId(new Project(), getDevelopersByProjectId).getId();
         try {
             List<Developer> developersByProjectId = new ProjectDaoService(storage.getConnection()).getDevelopersByProjectId(id);
             System.out.println(developersByProjectId);
@@ -423,5 +249,77 @@ public class ProjectState extends CliState {
         System.out.println(allBySpecialFormat);
 
         projectInputLoop();
+    }
+
+    private Project setId(Project project, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Id:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long id = Long.parseLong(scanner.nextLine());
+                project.setId(id);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return project;
+    }
+
+    private void setName(Project project, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter Name:";
+        while (true) {
+            System.out.println(navigation);
+            String name = scanner.nextLine();
+            try {
+                project.setName(name);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setCompanyId(Project project, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter CompanyId:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long companyId = Long.parseLong(scanner.nextLine());
+                project.setCompanyId(companyId);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setCustomerId(Project project, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter CustomerId:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                long customerId = Long.parseLong(scanner.nextLine());
+                project.setCustomerId(customerId);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void setCreationDate(Project project, String nameCmd) {
+        String navigation = path + "/" + nameCmd + ". Enter CreationDate:";
+        while (true) {
+            System.out.println(navigation);
+            try {
+                LocalDate creationDate = LocalDate.parse(scanner.nextLine());
+                project.setCreationDate(creationDate);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("date format = year-month-day. For example: 2022-06-07");
+            }
+        }
     }
 }

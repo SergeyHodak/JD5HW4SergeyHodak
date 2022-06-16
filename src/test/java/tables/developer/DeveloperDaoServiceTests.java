@@ -1,8 +1,5 @@
 package tables.developer;
 
-import exceptions.AgeOutOfRange;
-import exceptions.NotNegative;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,50 +43,33 @@ class DeveloperDaoServiceTests {
 
     @Test
     public void testCreate() throws SQLException {
-        String[][] valuesForNewDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male", "1000"},
-                {null, "TestSecondName1", "20", "female", "1000"},
-                {"TestFirstName1", null, "21", "male", "1000"},
-                {"TestFirstName2", "TestSecondName2", "0", "female", "1000"},
-                {"TestFirstName3", "TestSecondName3", "-50", "male", "1000"},
-                {"TestFirstName4", "TestSecondName4", "200", "female", "1000"},
-                {"TestFirstName5", "TestSecondName5", "15", null, "1000"},
-                {"T".repeat(51), "TestSecondName6", "37", "male", "1000"},
-                {"TestFirstName6", "T".repeat(51), "33", "female", "1000"}
-        };
+        Developer expected = new Developer();
+        expected.setFirstName("TestFirstName");
+        expected.setSecondName("TestSecondName");
+        expected.setAge(28);
+        expected.setGender(Developer.Gender.male);
+        expected.setSalary(1_000);
 
-        for (String[] newDeveloper : valuesForNewDevelopers) {
-            try {
-                long id = daoService.create(new Developer() {{
-                    setFirstName(newDeveloper[0]);
-                    setSecondName(newDeveloper[1]);
-                    setAge(Integer.parseInt(newDeveloper[2]));
-                    setGender(Gender.valueOf(newDeveloper[3]));
-                    setSalary(Double.parseDouble(newDeveloper[4]));
-                }});
+        long id = daoService.create(expected);
 
-                Developer saved = daoService.getById(id);
+        Developer actual = daoService.getById(id);
 
-                Assertions.assertEquals(id, saved.getId());
-                Assertions.assertEquals(newDeveloper[0], saved.getFirstName());
-                Assertions.assertEquals(newDeveloper[1], saved.getSecondName());
-                Assertions.assertEquals(Integer.parseInt(newDeveloper[2]), saved.getAge());
-                Assertions.assertEquals(Developer.Gender.valueOf(newDeveloper[3]), saved.getGender());
-                Assertions.assertEquals(Double.parseDouble(newDeveloper[4]), saved.getSalary());
-            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit | NotNegative thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assertions.assertEquals(expected.getSecondName(), actual.getSecondName());
+        Assertions.assertEquals(expected.getAge(), actual.getAge());
+        Assertions.assertEquals(expected.getGender(), actual.getGender());
+        Assertions.assertEquals(expected.getSalary(), actual.getSalary());
     }
 
     @Test
-    public void getAllTest() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange, NotNegative {
+    public void getAllTest() throws SQLException {
         Developer expected = new Developer();
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
         expected.setAge(19);
         expected.setGender(Developer.Gender.female);
-        expected.setSalary(1000);
+        expected.setSalary(1_000);
 
         long id = daoService.create(expected);
         expected.setId(id);
@@ -101,7 +81,7 @@ class DeveloperDaoServiceTests {
     }
 
     @Test
-    public void testUpdate() throws NumberOfCharactersExceedsTheLimit, AgeOutOfRange, SQLException {
+    public void testUpdate() throws SQLException {
         Developer original = new Developer();
         original.setFirstName("TestFirstName");
         original.setSecondName("TestSecondName");
@@ -111,45 +91,28 @@ class DeveloperDaoServiceTests {
         long id = daoService.create(original);
         original.setId(id);
 
-        String[][] valuesForUpdates = {
-                {"TestUpdateFirstName", "TestUpdateSecondName", "49", "female", "1000"},
-                {null, "TestUpdateSecondName1", "34", "male", "1500"},
-                {"TestUpdateFirstName1", null, "33", "female", "1124.9"},
-                {"TestUpdateFirstName2", "TestUpdateSecondName2", "0", "male", "1039"},
-                {"TestFirstName3", "TestSecondName3", "-50", "female", "1000"},
-                {"TestFirstName4", "TestSecondName4", "200", "male", "1000"},
-                {"TestFirstName5", "TestSecondName5", "15", null, "1000"},
-                {"T".repeat(51), "TestSecondName6", "37", "female", "1000"},
-                {"TestFirstName6", "T".repeat(51), "33", "male", "1000"}
-        };
+        Developer expected = new Developer();
+        expected.setId(id);
+        expected.setFirstName("TestUpdateFirstName");
+        expected.setSecondName("TestUpdateSecondName");
+        expected.setAge(49);
+        expected.setGender(Developer.Gender.female);
+        expected.setSalary(1_000);
 
-        for (String[] valuesForUpdate : valuesForUpdates) {
-            try {
-                daoService.update(new Developer() {{
-                    setId(id);
-                    setFirstName(valuesForUpdate[0]);
-                    setSecondName(valuesForUpdate[1]);
-                    setAge(Integer.parseInt(valuesForUpdate[2]));
-                    setGender(Gender.valueOf(valuesForUpdate[3]));
-                    setSalary(Double.parseDouble(valuesForUpdate[4]));
-                }});
+        daoService.update(expected);
 
-                Developer saved = daoService.getById(id);
+        Developer actual = daoService.getById(id);
 
-                Assertions.assertEquals(saved.getId(), id);
-                Assertions.assertEquals(saved.getFirstName(), valuesForUpdate[0]);
-                Assertions.assertEquals(saved.getSecondName(), valuesForUpdate[1]);
-                Assertions.assertEquals(saved.getAge(), Integer.parseInt(valuesForUpdate[2]));
-                Assertions.assertEquals(saved.getGender(), Developer.Gender.valueOf(valuesForUpdate[3]));
-                Assertions.assertEquals(saved.getSalary(), Double.parseDouble(valuesForUpdate[4]));
-            } catch (AgeOutOfRange | NullPointerException | NumberOfCharactersExceedsTheLimit | NotNegative thrown) {
-                Assertions.assertNotEquals("", thrown.getMessage());
-            }
-        }
+        Assertions.assertEquals(id, actual.getId());
+        Assertions.assertEquals(expected.getFirstName(), actual.getFirstName());
+        Assertions.assertEquals(expected.getSecondName(), actual.getSecondName());
+        Assertions.assertEquals(expected.getAge(), actual.getAge());
+        Assertions.assertEquals(expected.getGender(), actual.getGender());
+        Assertions.assertEquals(expected.getSalary(), actual.getSalary());
     }
 
     @Test
-    public void testDelete() throws SQLException, NumberOfCharactersExceedsTheLimit, AgeOutOfRange {
+    public void testDelete() throws SQLException {
         Developer expected = new Developer();
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
@@ -170,15 +133,17 @@ class DeveloperDaoServiceTests {
                 {"TestFirstName3", "TestSecondName3", "21", "male", "1000"}
         };
 
+        List<Long> developerIds = new ArrayList<>();
         for (String[] newDeveloper : valuesForNewDevelopers) {
             try {
-                daoService.create(new Developer() {{
+                long developerId = daoService.create(new Developer() {{
                     setFirstName(newDeveloper[0]);
                     setSecondName(newDeveloper[1]);
                     setAge(Integer.parseInt(newDeveloper[2]));
                     setGender(Gender.valueOf(newDeveloper[3]));
                     setSalary(Double.parseDouble(newDeveloper[4]));
                 }});
+                developerIds.add(developerId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -189,24 +154,26 @@ class DeveloperDaoServiceTests {
                 {"python", "middle"}
         };
 
+        List<Long> skillIds = new ArrayList<>();
         for (String[] value : valuesForNewSkills) {
             try {
-                skillDaoService.create(new Skill() {{
+                long skillId = skillDaoService.create(new Skill() {{
                     setDepartment(value[0]);
                     setSkillLevel(value[1]);
                 }});
+                skillIds.add(skillId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        int[][] valuesForCreate = {
-                {1, 1},
-                {2, 2},
-                {3, 1}
+        long[][] valuesForCreate = {
+                {developerIds.get(0), skillIds.get(0)},
+                {developerIds.get(1), skillIds.get(1)},
+                {developerIds.get(2), skillIds.get(0)}
         };
 
-        for (int[] create : valuesForCreate) {
+        for (long[] create : valuesForCreate) {
             try {
                 developerSkillDaoService.create(new DeveloperSkill() {{
                     setDeveloperId(create[0]);

@@ -1,9 +1,5 @@
 package tables.project;
 
-import exceptions.AgeOutOfRange;
-import exceptions.MustNotBeNull;
-import exceptions.NotNegative;
-import exceptions.NumberOfCharactersExceedsTheLimit;
 import lombok.*;
 import tables.developer.Developer;
 
@@ -121,8 +117,6 @@ public class ProjectDaoService {
             result.setCost(rs.getDouble("cost"));
             result.setCreationDate(LocalDate.parse(rs.getString("creation_date")));
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -144,8 +138,6 @@ public class ProjectDaoService {
                 result.add(project);
             }
             return result;
-        } catch (NumberOfCharactersExceedsTheLimit | MustNotBeNull e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -196,12 +188,10 @@ public class ProjectDaoService {
                 result.add(developer);
             }
             return result;
-        } catch (AgeOutOfRange | NumberOfCharactersExceedsTheLimit | NotNegative e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public List<project> getAllBySpecialFormat() {
+    public List<project> getAllBySpecialFormat() throws SQLException {
         List<project> result = new ArrayList<>();
         try (ResultSet rs = getAllBySpecialFormatSt.executeQuery()) {
             while (rs.next()) {
@@ -212,22 +202,15 @@ public class ProjectDaoService {
                 result.add(unit);
             }
             return result;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return result;
     }
 
     @EqualsAndHashCode
+    @Setter
+    @Getter
     public static class project {
-        @Setter
-        @Getter
         private LocalDate creationDate;
-        @Setter
-        @Getter
         private String name;
-        @Setter
-        @Getter
         private int developerCount;
 
         @Override
