@@ -47,7 +47,7 @@ class DeveloperDaoServiceTests {
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
         expected.setAge(28);
-        expected.setGender(Developer.Gender.male);
+        expected.setGender(Developer.Gender.MALE);
         expected.setSalary(1_000);
 
         long id = daoService.create(expected);
@@ -68,7 +68,7 @@ class DeveloperDaoServiceTests {
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
         expected.setAge(19);
-        expected.setGender(Developer.Gender.female);
+        expected.setGender(Developer.Gender.FEMALE);
         expected.setSalary(1_000);
 
         long id = daoService.create(expected);
@@ -86,7 +86,7 @@ class DeveloperDaoServiceTests {
         original.setFirstName("TestFirstName");
         original.setSecondName("TestSecondName");
         original.setAge(19);
-        original.setGender(Developer.Gender.male);
+        original.setGender(Developer.Gender.MALE);
 
         long id = daoService.create(original);
         original.setId(id);
@@ -96,7 +96,7 @@ class DeveloperDaoServiceTests {
         expected.setFirstName("TestUpdateFirstName");
         expected.setSecondName("TestUpdateSecondName");
         expected.setAge(49);
-        expected.setGender(Developer.Gender.female);
+        expected.setGender(Developer.Gender.FEMALE);
         expected.setSalary(1_000);
 
         daoService.update(expected);
@@ -117,7 +117,7 @@ class DeveloperDaoServiceTests {
         expected.setFirstName("TestFirstName");
         expected.setSecondName("TestSecondName");
         expected.setAge(23);
-        expected.setGender(Developer.Gender.male);
+        expected.setGender(Developer.Gender.MALE);
 
         long id = daoService.create(expected);
         daoService.deleteById(id);
@@ -128,9 +128,9 @@ class DeveloperDaoServiceTests {
     @Test
     public void testGetDevelopersBySkillLevel() throws SQLException {
         String[][] valuesForNewDevelopers = {
-                {"TestFirstName1", "TestSecondName1", "28", "male", "1000"},
-                {"TestFirstName2", "TestSecondName2", "20", "female", "1000"},
-                {"TestFirstName3", "TestSecondName3", "21", "male", "1000"}
+                {"TestFirstName1", "TestSecondName1", "28", "MALE", "1000"},
+                {"TestFirstName2", "TestSecondName2", "20", "FEMALE", "1000"},
+                {"TestFirstName3", "TestSecondName3", "21", "MALE", "1000"}
         };
 
         List<Long> developerIds = new ArrayList<>();
@@ -193,9 +193,9 @@ class DeveloperDaoServiceTests {
     @Test
     public void testGetDevelopersByDepartment() throws SQLException {
         String[][] valuesForNewDevelopers = {
-                {"TestFirstName4", "TestSecondName4", "28", "male", "1000"},
-                {"TestFirstName5", "TestSecondName5", "20", "female", "1000"},
-                {"TestFirstName6", "TestSecondName6", "21", "male", "1000"}
+                {"TestFirstName4", "TestSecondName4", "28", "MALE", "1000"},
+                {"TestFirstName5", "TestSecondName5", "20", "FEMALE", "1000"},
+                {"TestFirstName6", "TestSecondName6", "21", "MALE", "1000"}
         };
 
         List<Long> developerIds = new ArrayList<>();

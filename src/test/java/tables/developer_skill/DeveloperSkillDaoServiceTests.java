@@ -50,7 +50,7 @@ class DeveloperSkillDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Gender.male);
+            setGender(Gender.MALE);
         }});
 
         skillDaoService.create(new Skill() {{
@@ -72,7 +72,7 @@ class DeveloperSkillDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Developer.Gender.male);
+            setGender(Developer.Gender.MALE);
         }});
 
         skillDaoService.create(new Skill() {{
@@ -94,9 +94,9 @@ class DeveloperSkillDaoServiceTests {
     @Test
     public void testGetAllByProjectId() throws SQLException {
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "female"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "FEMALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -156,9 +156,9 @@ class DeveloperSkillDaoServiceTests {
     @Test
     public void testGetAllBySkillId() throws SQLException {
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "female"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "FEMALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -218,9 +218,9 @@ class DeveloperSkillDaoServiceTests {
     @Test
     public void testUpdate() throws SQLException {
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "female"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "FEMALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -287,7 +287,7 @@ class DeveloperSkillDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Developer.Gender.male);
+            setGender(Developer.Gender.MALE);
         }});
 
         skillDaoService.create(new Skill() {{

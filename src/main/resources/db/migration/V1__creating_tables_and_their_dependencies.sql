@@ -28,7 +28,7 @@ CREATE TABLE developer (
     age INT,
     gender VARCHAR(10) NOT NULL,
     CHECK(0 <= age and age <= 150),
-    CHECK(gender IN('male', 'female'))
+    CHECK(gender IN('MALE', 'FEMALE'))
 );
 
 CREATE TABLE project_developer (

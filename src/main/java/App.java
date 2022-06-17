@@ -78,11 +78,11 @@ public class App {
 //        }
 //
 //        String[][] valuesForCreateDevelopers = {
-//                {"Did", "Panas", "61", "male", "7000"},
-//                {"Fedir", "Tomson", "45", "male", "4000"},
-//                {"Olga", "Dzi", "50", "female", "1000"},
-//                {"Oleg", "Filli", "23", "male", "200"},
-//                {"Nina", "Weendi", "24", "female", "500"},
+//                {"Did", "Panas", "61", "MALE", "7000"},
+//                {"Fedir", "Tomson", "45", "MALE", "4000"},
+//                {"Olga", "Dzi", "50", "FEMALE", "1000"},
+//                {"Oleg", "Filli", "23", "MALE", "200"},
+//                {"Nina", "Weendi", "24", "FEMALE", "500"},
 //        };
 //
 //        for (String[] values : valuesForCreateDevelopers) {

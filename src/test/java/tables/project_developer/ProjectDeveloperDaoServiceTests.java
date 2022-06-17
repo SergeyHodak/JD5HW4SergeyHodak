@@ -77,7 +77,7 @@ class ProjectDeveloperDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Developer.Gender.male);
+            setGender(Developer.Gender.MALE);
         }});
 
         boolean result = daoService.create(new ProjectDeveloper() {{
@@ -112,7 +112,7 @@ class ProjectDeveloperDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Developer.Gender.male);
+            setGender(Developer.Gender.MALE);
         }});
 
         ProjectDeveloper expected = new ProjectDeveloper();
@@ -155,9 +155,9 @@ class ProjectDeveloperDaoServiceTests {
         }
 
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "male"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "MALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -230,9 +230,9 @@ class ProjectDeveloperDaoServiceTests {
         }
 
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "male"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "MALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -305,9 +305,9 @@ class ProjectDeveloperDaoServiceTests {
         }
 
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male"},
-                {"TestFirstName1", "TestSecondName1", "29", "male"},
-                {"TestFirstName2", "TestSecondName2", "30", "male"}
+                {"TestFirstName", "TestSecondName", "28", "MALE"},
+                {"TestFirstName1", "TestSecondName1", "29", "MALE"},
+                {"TestFirstName2", "TestSecondName2", "30", "MALE"}
         };
 
         for (String[] valuesForCreateDeveloper : valuesForCreateDevelopers) {
@@ -379,7 +379,7 @@ class ProjectDeveloperDaoServiceTests {
             setFirstName("TestFirstName");
             setSecondName("TestSecondName");
             setAge(28);
-            setGender(Developer.Gender.male);
+            setGender(Developer.Gender.MALE);
         }});
 
         ProjectDeveloper test = new ProjectDeveloper();

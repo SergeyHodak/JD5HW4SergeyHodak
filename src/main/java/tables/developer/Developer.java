@@ -12,7 +12,7 @@ public class Developer {
     private double salary;
 
     public enum Gender {
-        male,
-        female
+        MALE,
+        FEMALE
     }
 }

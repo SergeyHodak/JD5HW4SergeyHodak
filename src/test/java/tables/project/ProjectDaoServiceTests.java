@@ -242,8 +242,8 @@ class ProjectDaoServiceTests {
         }});
 
         String[][] valuesForCreateDevelopers = {
-                {"TestFirstName", "TestSecondName", "28", "male", "1000"},
-                {"TestFirstName", "TestSecondName", "28", "male", "1100"}
+                {"TestFirstName", "TestSecondName", "28", "MALE", "1000"},
+                {"TestFirstName", "TestSecondName", "28", "MALE", "1100"}
         };
 
         List<Long> developerIds = new ArrayList<>();
@@ -300,9 +300,9 @@ class ProjectDaoServiceTests {
         }});
 
         String[][] valuesForNewDevelopers = {
-                {"TestFirstName1", "TestSecondName2", "28", "male", "1000"},
-                {"TestFirstName2", "TestSecondName2", "30", "female", "1000"},
-                {"TestFirstName3", "TestSecondName3", "27", "male", "1000"},
+                {"TestFirstName1", "TestSecondName2", "28", "MALE", "1000"},
+                {"TestFirstName2", "TestSecondName2", "30", "FEMALE", "1000"},
+                {"TestFirstName3", "TestSecondName3", "27", "MALE", "1000"},
         };
 
         for (String[] newDeveloper : valuesForNewDevelopers) {
